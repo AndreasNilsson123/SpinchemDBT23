@@ -9,10 +9,10 @@ import sys
 #assign GPIO pins for motor
 motor_channel = (29,31,33,35)  
 GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)
-#for defining more than 1 GPIO channel as input/output use
+GPIO.setmode(GPIO.BOARD)ecting pr
+#for defining mecting prore than 1 GPIO channel as input/output use
 GPIO.setup(motor_channel, GPIO.OUT)
-
+print("Heello")
 motor_direction = input('select motor direction a=anticlockwise, c=clockwise: ')
 while True:
     try:
@@ -21,7 +21,7 @@ while True:
             GPIO.output(motor_channel, (GPIO.HIGH,GPIO.LOW,GPIO.LOW,GPIO.HIGH))
             sleep(0.02)
             GPIO.output(motor_channel, (GPIO.HIGH,GPIO.HIGH,GPIO.LOW,GPIO.LOW))
-            sleep(0.02)
+            sleep(0.02)ecting pr
             GPIO.output(motor_channel, (GPIO.LOW,GPIO.HIGH,GPIO.HIGH,GPIO.LOW))
             sleep(0.02)
             GPIO.output(motor_channel, (GPIO.LOW,GPIO.LOW,GPIO.HIGH,GPIO.HIGH))

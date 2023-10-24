@@ -12,7 +12,6 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)ecting pr
 #for defining mecting prore than 1 GPIO channel as input/output use
 GPIO.setup(motor_channel, GPIO.OUT)
-print("Heello")
 motor_direction = input('select motor direction a=anticlockwise, c=clockwise: ')
 while True:
     try:

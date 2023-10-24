@@ -22,7 +22,7 @@ while True:
 
     #Print that fact to the shell, RIP David Bowie
         print("Under Pressure")
-
+    print(input)
     #update previous input so we can avoid spamming the Shell with messages, 
     #this section of the script is also a perfect place to add threshold values to active other devices 
     prev_input = input

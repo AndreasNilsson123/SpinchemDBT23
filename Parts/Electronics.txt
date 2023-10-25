@@ -1,0 +1,7 @@
+For stepper motors:
+- 100 micro Farad capacitors 10 pcs: https://www.elfa.se/sv/radiell-elektrolytkondensator-100uf-10ua-10v-105ma-rnd-components-rnd-150ehr101m10b/p/30092016?ext_cid=shgooaqsesv-Shopping-PerformanceMax-CSS&cq_src=google_ads&cq_cmp=18208288444&cq_con=&cq_term=&cq_med=pla&cq_plac=&cq_net=x&cq_pos=&cq_plt=gp&gclid=CjwKCAjw1t2pBhAFEiwA_-A-NNM-cHezfUHoeYdM3LqDCS5hSlhqr9aFZOlR8eegyW-KkOliJi3CFBoCk-EQAvD_BwE&gclsrc=aw.ds 
+
+- Stepper motor driver: https://www.elfa.se/en/dc-motor-and-stepper-featherwing-assembled-adafruit-3243/p/30172289?ext_cid=shgooaqsesv-Shopping-PerformanceMax-CSS&cq_src=google_ads&cq_cmp=20378176311&cq_con=&cq_term=&cq_med=pla&cq_plac=&cq_net=x&cq_pos=&cq_plt=gp&gclid=CjwKCAjw-eKpBhAbEiwAqFL0mpMX3yKT6dDNhzTSSTNJqugBpWvRYkFHVPp2Xic9F62of6TKXPfzDBoCeEsQAvD_BwE&gclsrc=aw.ds  
+
+Electronics:
+- Breadboard kit: https://www.elfa.se/en/breadboard-jumper-wire-kit-white-1360-connection-points-165-5x82-5mm-rnd-components-rnd-255-00022/p/30115120?trackQuery=cat-DNAV_PL_01080501&pos=16&origPos=16&origPageSize=50&track=true&sid=a21b852219c5252208e7dca8911bee1a51faec9c

@@ -1,0 +1,7 @@
+GUI:
+- How much reactant u want to use (120 - 300)ml
+- Displaying which pockets that has an RBR in it (green for empty, red for taken)
+- Choose what stirring speed u want
+- Choose how much time u want it to be stirred
+- Error message display
+

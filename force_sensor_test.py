@@ -28,4 +28,4 @@ while True:
     prev_input = input
 
     #Have a slight pause here, also to avoid spamming the shell with data
-    time.sleep(0.10)
+    time.sleep(0.10) 

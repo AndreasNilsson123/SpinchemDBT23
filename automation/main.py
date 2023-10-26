@@ -97,6 +97,11 @@ def move_horizotal_motors(stepperMotor: StepperMotor, direction: int, steps: int
         stepperMotor.set_direction(stepperMotor,"counterclockwise")
     stepperMotor.step(stepperMotor, steps, delay)
 
+# ------------------------------------------ #
+# --------------- Automation --------------- #
+# ------------------------------------------ #
+
+
 # Fill the vessel
 execute_valve_pump_sequence(5, valve_filling, pump_filling)
 

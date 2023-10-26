@@ -59,8 +59,43 @@ def execute_valve_pump_sequence(wait_time: int, valve: Valve, pump: Pump) -> Non
     pump.turn_off()
     valve.close()
     
-def move_vertical_motors()
+def move_vertical_motors(stepperMotor: StepperMotor, direction: int, steps: int, delay: int) -> None:
+    """
+    Moves the vertical motors based on the given parameters.
 
+    Args:
+        stepperMotor (StepperMotor): The stepper motor object to control the vertical motors.
+        direction (int): The direction of movement. 0 indicates clockwise (Up), 1 indicates counterclockwise (Down).
+        steps (int): The number of steps to move the motors.
+        delay (int): The delay between each step.
+
+    Returns:
+        None: This function does not return anything.
+    """
+    if direction == 0: # clockwise (Up)
+        stepperMotor.set_direction(stepperMotor,"clockwise")
+    elif direction == 1: # clockwise (Down)
+        stepperMotor.set_direction(stepperMotor,"counterclockwise")
+    stepperMotor.step(stepperMotor, steps, delay)
+    
+def move_horizotal_motors(stepperMotor: StepperMotor, direction: int, steps: int, delay: int) -> None:
+    """
+    Moves the horizontal motors in a specified direction by a certain number of steps with a given delay.
+
+    Parameters:
+        stepperMotor (StepperMotor): The stepper motor object.
+        direction (int): The direction in which to move the motors. 0 for clockwise (Right), 1 for counterclockwise (Left).
+        steps (int): The number of steps to move the motors.
+        delay (int): The delay between each step.
+
+    Returns:
+        None
+    """
+    if direction == 0: # clockwise (Right)
+        stepperMotor.set_direction(stepperMotor,"clockwise")
+    elif direction == 1: # clockwise (Left)
+        stepperMotor.set_direction(stepperMotor,"counterclockwise")
+    stepperMotor.step(stepperMotor, steps, delay)
 
 # Fill the vessel
 execute_valve_pump_sequence(5, valve_filling, pump_filling)

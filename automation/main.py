@@ -3,6 +3,7 @@ from valve import Valve
 from pump import Pump
 from stepper_controller import StepperMotor
 from stirrer_motor import StirrerMotor
+from detection import ForceSensor
 import time
 
 GPIO.setmode(GPIO.BCM)
@@ -16,11 +17,11 @@ VALVE2_PIN = 16
 PUMP1_PIN = 18
 PUMP2_PIN = 19
 
-# Initialize valve and pump objects
-valve_filling = Valve(VALVE1_PIN)
-pump_filling = Pump(PUMP1_PIN)
-valve_emptying = Valve(VALVE2_PIN)
-pump_emptying = Pump(PUMP2_PIN)
+# Sensor pins
+SENSOR_1_PIN = 10
+SENSOR_2_PIN = 11
+SENSOR_3_PIN = 12
+SENSOR_4_PIN = 13
 
 # Define GPIO pins for the stepper motors
 VERTICAL_STEPPER_1_STEP_PIN = 22
@@ -31,6 +32,13 @@ VERTICAL_STEPPER_2_DIRECTION_PIN = 25
 
 HORIZONTAL_STEPPER_STEP_PIN = 4
 HORIZONTAL_STEPPER_DIRECTION_PIN = 5
+
+# Initialize valve and pump objects
+valve_filling = Valve(VALVE1_PIN)
+pump_filling = Pump(PUMP1_PIN)
+valve_emptying = Valve(VALVE2_PIN)
+pump_emptying = Pump(PUMP2_PIN)
+
 
 # Initialize stepper motor objects
 vertical_stepper_1 = StepperMotor(VERTICAL_STEPPER_1_STEP_PIN, VERTICAL_STEPPER_1_DIRECTION_PIN)
@@ -123,6 +131,21 @@ def activate_stirrer(stirrer: StirrerMotor, time: int, speed: int) -> None:
     response = stirrer.send_command("\r\n") # Fix input command
     stirrer.turn_on() 
 
+def detect_objects(sensors):
+    """
+    Detects objects using the given sensors.
+
+    Parameters:
+    - sensors (list): A list of sensor objects.
+
+    Returns:
+    - None
+    """
+    for idx, sensor in enumerate(sensors, start=1):
+        if sensor.object_detected():
+            print(f"Sensor {idx}: Object detected")
+        else:
+            print(f"Sensor {idx}: No object detected")
 
 # ------------------------------------------ #
 # --------------- Automation --------------- #

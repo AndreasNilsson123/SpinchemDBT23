@@ -39,14 +39,17 @@ pump_filling = Pump(PUMP1_PIN)
 valve_emptying = Valve(VALVE2_PIN)
 pump_emptying = Pump(PUMP2_PIN)
 
+# Initialize sensor objects
+sensor_1 = ForceSensor(SENSOR_1_PIN)
+sensor_2 = ForceSensor(SENSOR_2_PIN)
+sensor_3 = ForceSensor(SENSOR_3_PIN)
+sensor_4 = ForceSensor(SENSOR_4_PIN)
+sensors = [sensor_1, sensor_2, sensor_3, sensor_4] #Turn sensors into a list
 
 # Initialize stepper motor objects
 vertical_stepper_1 = StepperMotor(VERTICAL_STEPPER_1_STEP_PIN, VERTICAL_STEPPER_1_DIRECTION_PIN)
 vertical_stepper_2 = StepperMotor(VERTICAL_STEPPER_2_STEP_PIN, VERTICAL_STEPPER_2_DIRECTION_PIN)
 horizontal_stepper = StepperMotor(HORIZONTAL_STEPPER_STEP_PIN, HORIZONTAL_STEPPER_DIRECTION_PIN)
-
-
-# Stirr motor
 
 # Define the serial port and baudrate
 SERIAL_PORT = '/dev/ttyUSB0'  # Adjust based on your specific port

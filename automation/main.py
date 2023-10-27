@@ -123,6 +123,8 @@ execute_valve_pump_sequence(5, valve_filling, pump_filling)
 response = stirrer.send_command("START\r\n")
 print(f"Response from stirrer motor: {response}")
 
+
+
 # Close the serial connection when done
 stirrer.serial.close()
 # Clean up GPIO

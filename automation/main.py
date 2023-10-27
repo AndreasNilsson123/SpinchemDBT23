@@ -108,6 +108,17 @@ def move_horizotal_motors(stepperMotor: StepperMotor, direction: int, steps: int
         stepperMotor.set_direction(stepperMotor,"counterclockwise")
     stepperMotor.step(stepperMotor, steps, delay)
 
+def activate_stirrer(stirrer: StirrerMotor, time: int, speed: int) -> None:
+    """
+    Activates the stirrer motor.
+
+    Returns:
+        None
+    """
+    response = stirrer.send_command("\r\n") # Fix input command
+    stirrer.turn_on() 
+
+
 # ------------------------------------------ #
 # --------------- Automation --------------- #
 # ------------------------------------------ #

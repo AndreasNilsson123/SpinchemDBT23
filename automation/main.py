@@ -110,7 +110,12 @@ def move_horizotal_motors(stepperMotor: StepperMotor, direction: int, steps: int
 
 def activate_stirrer(stirrer: StirrerMotor, time: int, speed: int) -> None:
     """
-    Activates the stirrer motor.
+    Activate the stirrer motor for a specified amount of time at a given speed.
+
+    Args:
+        stirrer (StirrerMotor): The stirrer motor object.
+        time (int): The duration of stirring in seconds.
+        speed (int): The speed of the stirrer motor.
 
     Returns:
         None

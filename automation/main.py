@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 from valve import Valve
 from pump import Pump
 from stepper_controller import StepperMotor
+from stirrer_motor import StirrerMotor
 import time
 
 GPIO.setmode(GPIO.BCM)
@@ -35,6 +36,16 @@ HORIZONTAL_STEPPER_DIRECTION_PIN = 5
 vertical_stepper_1 = StepperMotor(VERTICAL_STEPPER_1_STEP_PIN, VERTICAL_STEPPER_1_DIRECTION_PIN)
 vertical_stepper_2 = StepperMotor(VERTICAL_STEPPER_2_STEP_PIN, VERTICAL_STEPPER_2_DIRECTION_PIN)
 horizontal_stepper = StepperMotor(HORIZONTAL_STEPPER_STEP_PIN, HORIZONTAL_STEPPER_DIRECTION_PIN)
+
+
+# Stirr motor
+
+# Define the serial port and baudrate
+SERIAL_PORT = '/dev/ttyUSB0'  # Adjust based on your specific port
+BAUDRATE = 9600  # Adjust based on your motor's specifications
+
+# Initialize the stirrer motor object
+stirrer = StirrerMotor(SERIAL_PORT, BAUDRATE)
 
 # ------------------------------------------ #
 # ---------------- Methods ----------------- #
@@ -105,5 +116,14 @@ def move_horizotal_motors(stepperMotor: StepperMotor, direction: int, steps: int
 # Fill the vessel
 execute_valve_pump_sequence(5, valve_filling, pump_filling)
 
+# Example code for stirrer control
+
+# Example Usage:
+# Send commands to the stirrer motor
+response = stirrer.send_command("START\r\n")
+print(f"Response from stirrer motor: {response}")
+
+# Close the serial connection when done
+stirrer.serial.close()
 # Clean up GPIO
 GPIO.cleanup()

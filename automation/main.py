@@ -154,18 +154,14 @@ def detect_objects(sensors):
 # --------------- Automation --------------- #
 # ------------------------------------------ #
 
-
-# Fill the vessel
-execute_valve_pump_sequence(5, valve_filling, pump_filling)
-
-# Example code for stirrer control
-
-# Example Usage:
-# Send commands to the stirrer motor
-response = stirrer.send_command("START\r\n")
-print(f"Response from stirrer motor: {response}")
-
-
+# Two parts of automation
+# 1. RBR exchange
+#    - Speed control
+#    - Duration to exchange
+#    - Duration to stop
+# 2. Refill of the vessel
+#    - How much fluid
+#    - Exchange time
 
 # Close the serial connection when done
 stirrer.serial.close()

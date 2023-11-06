@@ -14,8 +14,8 @@ GPIO.setmode(GPIO.BCM)
 # Define GPIO pins for valve and pump
 VALVE1_PIN = 17
 VALVE2_PIN = 16
-PUMP1_PIN = 18
-PUMP2_PIN = 19
+PUMP1_PIN = 18 # May not be needed
+PUMP2_PIN = 19 # May not be needed
 
 # Sensor pins
 SENSOR_1_PIN = 10
@@ -110,7 +110,7 @@ def move_horizotal_motors(stepperMotor: StepperMotor, direction: int, steps: int
         steps (int): The number of steps to move the motors.
         delay (int): The delay between each step.
 
-    Returns:
+    Returns:                        
         None
     """
     if direction == 0: # clockwise (Right)
@@ -119,20 +119,28 @@ def move_horizotal_motors(stepperMotor: StepperMotor, direction: int, steps: int
         stepperMotor.set_direction(stepperMotor,"counterclockwise")
     stepperMotor.step(stepperMotor, steps, delay)
 
-def activate_stirrer(stirrer: StirrerMotor, time: int, speed: int) -> None:
+def stirrer_command(stirrer: StirrerMotor, time: int, speed: int, command: str) -> None:
     """
-    Activate the stirrer motor for a specified amount of time at a given speed.
-
-    Args:
-        stirrer (StirrerMotor): The stirrer motor object.
-        time (int): The duration of stirring in seconds.
-        speed (int): The speed of the stirrer motor.
-
+    A function that sends a command to a stirrer motor.
+    
+    Parameters:
+        stirrer: A StirrerMotor object representing the stirrer motor.
+        time: An integer representing the time (in seconds) to execute the command.
+        speed: An integer representing the speed of the stirrer motor.
+        command: A string representing the command to be sent to the stirrer motor.
+                ("Start" or "Stop")
     Returns:
         None
     """
-    response = stirrer.send_command("\r\n") # Fix input command
-    stirrer.turn_on() 
+    if command == "Start":
+        command = "1,WSE," + str(speed) + "\r\n"
+    elif command == "Stop":
+        command = "1,WSE,0\r\n" 
+    response = stirrer.send_command(command) # Fix input command
+
+    if not response == "1,HS,OK":
+        raise Exception("Unexpected response from stirrer: " + response)
+
 
 def detect_objects(sensors):
     """
@@ -149,19 +157,75 @@ def detect_objects(sensors):
             print(f"Sensor {idx}: Object detected")
         else:
             print(f"Sensor {idx}: No object detected")
+            
+
+def distance_to_steps_horizontal_motors(distance: float) -> int:
+    """
+    Calculates the number of steps required for the horizontal motors to move a given distance.
+
+    Args:
+        distance (float): The distance to be covered by the horizontal motors.
+
+    Returns:
+        int: The number of steps required for the horizontal motors to move the given distance.
+    """
+    steps = ...
+    return steps
+
+def distance_to_steps_vertical_motor(distance: float) -> int:
+    """
+    Calculate the number of steps required for a vertical motor to move a given distance.
+    
+    Parameters:
+        distance (float): The distance to be moved by the motor.
+        
+    Returns:
+        int: The number of steps required for the motor to move the given distance.
+    """    
+    steps = ...
+    return steps
 
 # ------------------------------------------ #
 # --------------- Automation --------------- #
 # ------------------------------------------ #
 
-# Two parts of automation
-# 1. RBR exchange
-#    - Speed control
-#    - Duration to exchange
-#    - Duration to stop
-# 2. Refill of the vessel
-#    - How much fluid
-#    - Exchange time
+# 1. Button for RBR pick-up
+# 1.1 Locate new RBR using sensors
+# 1.2 Move cradle to horizontal position of RBR
+# 1.3 Move cradle to vertical position of RBR
+# 1.4 Move cradle back to top vertical position
+
+# 2. Button for moving RBR to vessel
+# 2.1 Move cradle to horizontal position of vessel
+# 2.2 Move cradle to vertical position of vessel
+
+# 3. Fill the vessel with reagnet
+# 3.1 Open valve for filling vessel
+# 3.2 Keep the valve opend for a certain amount of time
+# 3.3 Close valve for filling vessel
+# 3.4 CONDITIONS: Vessel is empty from liquid
+
+# 4. Start stirrer motor
+# 4.1 Start stirrer motor with defined speed
+# 4.2 CONDITIONS: Motor must be in vessel
+
+# 5. Stop stirrer motor
+# 5.1 Stop stirrer motor
+
+# 6. Empty vessel from reagent
+# 6.1 Open valve for emptying vessel
+# 6.2 Keep the valve opend for a certain amount of time
+# 6.3 Close valve for emptying vessel
+
+# 7. Lift RBR from vessel
+# 7.1 Lift cradle to top vertical position
+
+# 8. Leave RBR into container
+# 8.1 Move RBR into horizontal position of desired container
+# 8.2 Move RBR into vertical position of desired container
+# 8.3 Move RBR back to top vertical position
+# 8.4 CONDITIONS: Container must be empty
+
 
 # Close the serial connection when done
 stirrer.serial.close()

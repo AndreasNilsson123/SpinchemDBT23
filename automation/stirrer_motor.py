@@ -12,9 +12,11 @@ class StirrerMotor:
         Returns:
             None
         """
-        self.serial = serial.Serial(port, baudrate) 
+        self.serial = serial.Serial(port, baudrate)
+        
+        self.serial.write("0,WSM,1\r\n".encode()) # Activate serial mode
+        
         self.serial.timeout = 1  # Set timeout to 1 second (adjust as needed)
-        # Add initialization code
         
     def send_command(self, command):
         """

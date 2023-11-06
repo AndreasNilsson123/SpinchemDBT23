@@ -13,32 +13,20 @@ GPIO.setmode(GPIO.BCM)
 # ------------------------------------------ #
 
 # Define GPIO pins for valve and pump
-VALVE1_PIN = 17
-VALVE2_PIN = 16
-
+VALVE1_PIN = 17 ; VALVE2_PIN = 16
 # Sensor pins
-SENSOR_1_PIN = 10
-SENSOR_2_PIN = 11
-SENSOR_3_PIN = 12
-SENSOR_4_PIN = 13
-
+SENSOR_1_PIN = 10 ; SENSOR_2_PIN = 11 ; SENSOR_3_PIN = 12 ; SENSOR_4_PIN = 13
 # Define GPIO pins for the stepper motors
-VERTICAL_STEPPER_1_STEP_PIN = 22
-VERTICAL_STEPPER_1_DIRECTION_PIN = 23
-VERTICAL_STEPPER_2_STEP_PIN = 24
-VERTICAL_STEPPER_2_DIRECTION_PIN = 25
-HORIZONTAL_STEPPER_STEP_PIN = 4
-HORIZONTAL_STEPPER_DIRECTION_PIN = 5
-
+VERTICAL_STEPPER_1_STEP_PIN = 22 ; VERTICAL_STEPPER_1_DIRECTION_PIN = 23
+VERTICAL_STEPPER_2_STEP_PIN = 24 ; VERTICAL_STEPPER_2_DIRECTION_PIN = 25
+HORIZONTAL_STEPPER_STEP_PIN = 4 ; HORIZONTAL_STEPPER_DIRECTION_PIN = 5
 # Initialize valve and pump objects
 valve_filling = Valve(VALVE1_PIN)
-
 valve_emptying = Valve(VALVE2_PIN)
-
-
+# Pocket detection
 pocket1_detection = rbrPocketDetection(SENSOR_1_PIN, SENSOR_2_PIN)
 pocket2_detection = rbrPocketDetection(SENSOR_3_PIN, SENSOR_4_PIN)
-
+# Stepper controllers
 vertical_steppers = VerticalMotors(VERTICAL_STEPPER_1_STEP_PIN, VERTICAL_STEPPER_1_DIRECTION_PIN
                                   ,VERTICAL_STEPPER_2_STEP_PIN, VERTICAL_STEPPER_2_DIRECTION_PIN )
 horizontal_motor = HorizontalMotor(HORIZONTAL_STEPPER_STEP_PIN, HORIZONTAL_STEPPER_DIRECTION_PIN)
@@ -74,6 +62,19 @@ def stirrer_command(stirrer: StirrerMotor, time: int, speed: int, command: str) 
 
     if not response == "1,HS,OK":
         raise Exception("Unexpected response from stirrer: " + response)
+
+def position_calibration(vertical_steppers: VerticalMotors, horizontal_motor: HorizontalMotor) -> None:
+    """
+    A function that calibrates the position of the vertical steppers and the horizontal motor.
+    
+    Parameters:
+        vertical_steppers: A VerticalMotors object representing the vertical steppers.
+        horizontal_motor: A HorizontalMotor object representing the horizontal motor.
+    Returns:
+        None
+    """
+    vertical_steppers.calibrate()
+    horizontal_motor.calibrate()
 
             
 # ------------------------------------------ #
@@ -123,7 +124,8 @@ stirrer.serial.close()
 # Clean up GPIO
 GPIO.cleanup()
 
-# Tip change
-# stepperMotor <- horizontalMotors
-# stepperMotor <- verticalMotors
-# sensor <- pocketSensor
+# More fixes
+# Fix so that switches <- horizontalMotor
+# Fix so that switches <- verticalSteppers
+# And add calibration method to these classes
+# First calibration on verticalSteppers then one the horizontalMotor 

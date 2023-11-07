@@ -12,3 +12,5 @@ GPIO.setmode(GPIO.BCM)
 # Create an instance of the StepperMotor class
 stepperMotor = StepperMotor(18, 23)
 stepperMotor.step(40,1)
+
+GPIO.cleanup()

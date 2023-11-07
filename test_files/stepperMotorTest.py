@@ -4,7 +4,7 @@
 '''
 import RPi.GPIO as GPIO
 from time import sleep
-from automation.stepper_controller import StepperMotor
+from stepper_controller import StepperMotor
 
 # Initialize GPIO
 GPIO.setmode(GPIO.BCM)

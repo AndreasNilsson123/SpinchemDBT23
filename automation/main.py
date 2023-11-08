@@ -145,6 +145,19 @@ valve_emptying.open()
 sleep(5)
 valve_emptying.close()
 
+pocket1, pocket2 = setup_sensors(4,17,27,22)
+
+while True:
+    rbr1_detected = pocket1.detect_rbr()
+    rbr2_detected = pocket2.detect_rbr()
+    
+    if rbr1_detected:
+        print("RBR 1 is in place")
+    if rbr2_detected:
+        print("RBR 2 is in place")
+    
+    sleep(3)
+    
 # Close the serial connection when done
 #stirrer.serial.close()
 # Clean up GPIO

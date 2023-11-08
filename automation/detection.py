@@ -14,7 +14,6 @@ class ForceSensor:
         """
         self.pin = pin
         GPIO.setup(self.pin, GPIO.IN)
-        self.close()
 
     def object_detected(self):
         """

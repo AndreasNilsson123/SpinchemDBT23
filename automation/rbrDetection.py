@@ -9,7 +9,8 @@ class rbrPocketDetection():
         self.sensor2 = ForceSensor(sensor2_pin) # Bottom sensor
     
     def detect_rbr(self):
-        if self.sensor1.object_detected and not self.sensor2.object_detected:
+        print(self.sensor1.object_detected(), self.sensor2.object_detected())
+        if self.sensor1.object_detected() and not self.sensor2.object_detected():
             return True
         else:
             return False

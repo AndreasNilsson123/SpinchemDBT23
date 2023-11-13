@@ -51,8 +51,9 @@ class VerticalMotors:
         """
         self.vertical_motor_1.set_direction("clockwise")
         self.vertical_motor_2.set_direction("clockwise")
-        self.vertical_motor_1.step(steps, delay)
-        self.vertical_motor_2.step(steps, delay)
+        for _ in range(steps):
+            self.vertical_motor_1.step(1, delay)
+            self.vertical_motor_2.step(1, delay)
     
     def distance_to_steps(self, distance):
         """

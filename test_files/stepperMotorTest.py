@@ -18,14 +18,14 @@ S2PINDIR = 23
 
 # Steps and delay 
 nstep = 200
-delay_time = 0.01
+delay_time = 0.001
 # Create an instance of the StepperMotor class
 stepperMotor1 = StepperMotor(S1PINSTEP, S1PINDIR)
 stepperMotor2 = StepperMotor(S2PINSTEP, S2PINDIR)
 
 # Start stepper motor 1 
 stepperMotor1.step(nstep, delay_time)
-
+stepperMotor2.set_direction("clockwise")
 # Start stepper motor 2
 stepperMotor2.step(nstep, delay_time)
 

@@ -9,10 +9,24 @@ from stepper_controller import StepperMotor
 # Initialize GPIO
 GPIO.setmode(GPIO.BCM)
 
+# Set up pins
+S1PINSTEP = 17
+S1PINDIR = 27
+
+S2PINSTEP = 22
+S2PINDIR = 23
+
+# Steps and delay 
+nstep = 200
+delay_time = 0.01
 # Create an instance of the StepperMotor class
-stepperMotor = StepperMotor(27, 17)
-stepperMotor.step(200,0.001)
-stepperMotor.set_direction("counterclockwise")
-stepperMotor.step(200,0.001)
+stepperMotor1 = StepperMotor(S1PINSTEP, S1PINDIR)
+stepperMotor2 = StepperMotor(S2PINSTEP, S2PINDIR)
+
+# Start stepper motor 1 
+stepperMotor1.step(nstep, delay_time)
+
+# Start stepper motor 2
+stepperMotor2.step(nstep, delay_time)
 
 GPIO.cleanup()

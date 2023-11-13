@@ -20,15 +20,15 @@ S3PINDIR = 23
 
 # Steps and delay 
 nstep = 200
-delay_time = 0.001
+delay_time = 0.01
 # Create an instance of the StepperMotor class
 vertical_steppers = VerticalMotors(S1PINSTEP, S1PINDIR, S2PINSTEP, S2PINDIR)
 horizontal_motor = HorizontalMotor(S3PINSTEP, S3PINDIR)
 
 # Start stepper motor 1 
-stepperMotor1.step(nstep, delay_time)
+VerticalMotors.move_up(nstep, delay_time)
 
 # Start stepper motor 2
-stepperMotor2.step(nstep, delay_time)
+horizontal_motor.move_right(nstep, 0.1*delay_time)
 
 GPIO.cleanup()

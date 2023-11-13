@@ -135,29 +135,7 @@ def position_calibration(vertical_steppers: VerticalMotors, horizontal_motor: Ho
 # 8.4 CONDITIONS: Container must be empty
 
 # TEST CODE
-valve_filling, valve_emptying = setup_valves(18, 15)
-
-valve_filling.open()
-sleep(1)
-valve_filling.close()
-sleep(1)
-valve_emptying.open()
-sleep(1)
-valve_emptying.close()
-
-pocket1, pocket2 = setup_sensors(4,17,27,22)
-
-while True:
-    rbr1_detected = pocket1.detect_rbr()
-    rbr2_detected = pocket2.detect_rbr()
-    print(rbr1_detected)
-    print(rbr2_detected)
-    if rbr1_detected:
-        print("RBR 1 is in place")
-    if rbr2_detected:
-        print("RBR 2 is in place")
-    
-    sleep(3)
+stirrer = setup_stirrer('/dev/ttyAMA0', 9600)
     
 # Close the serial connection when done
 #stirrer.serial.close()

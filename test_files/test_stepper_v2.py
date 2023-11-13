@@ -12,15 +12,16 @@ GPIO.setup(DIR, GPIO.OUT)
 GPIO.setup(STEP, GPIO.OUT)
 GPIO.output(DIR, CW)
 
-step_count = SPR
-delay = .0208
-
+step_count = SPR*4
+delay = .01
+print("HEllo1")
 for x in range(step_count):
     GPIO.output(STEP, GPIO.HIGH)
     sleep(delay)
     GPIO.output(STEP, GPIO.LOW)
     sleep(delay)
-
+    
+print("HEllo2") 
 sleep(.5)
 GPIO.output(DIR, CCW)
 for x in range(step_count):

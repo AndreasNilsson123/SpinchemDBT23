@@ -10,17 +10,14 @@ class Position:
         self.x = x
         self.z = z
 
-    def move(self, dx, dz):
+    def get_position(self):
         """
-        Move the object by the specified amounts in each direction.
+        Get the position of the object.
 
-        Args:
-            dx (float): The amount to move in the x-direction.
-            dz (float): The amount to move in the z-direction.
+        Returns:
+            Tuple: A tuple containing the x and z coordinates of the object.
         """
-        self.x += dx
-        self.z += dz
-
+        return self.x, self.z
     def set_position(self, x, z):
         """
         Set the position of the object in the x and z coordinates.
@@ -31,3 +28,4 @@ class Position:
         """
         self.x = x
         self.z = z
+    

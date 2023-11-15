@@ -34,19 +34,30 @@ class StepperMotor:
         elif direction == "counterclockwise":
             GPIO.output(self.direction_pin, GPIO.LOW)
 
-    def step(self, steps, delay):
+    def step(self, steps, delay, second_stepper_pin = 0):
         """
         Executes a specified number of steps with a specified delay between each step.
 
         Parameters:
             steps (int): The number of steps to execute.
             delay (float): The delay in seconds between each step.
+            second_stepper_pin (int): The GPIO pin number for the second stepper motor.
 
         Returns:
             None
         """
-        for _ in range(steps):
-            GPIO.output(self.step_pin, GPIO.HIGH)
-            time.sleep(delay)
-            GPIO.output(self.step_pin, GPIO.LOW)
-            time.sleep(delay)
+        if second_stepper_pin == 0:
+            for _ in range(steps):
+                GPIO.output(self.step_pin, GPIO.HIGH)
+                time.sleep(delay)
+                GPIO.output(self.step_pin, GPIO.LOW)
+                time.sleep(delay)
+        elif not second_stepper_pin == 0:
+            for _ in range(steps):
+                GPIO.output(self.step_pin, GPIO.HIGH)
+                GPIO.output(second_stepper_pin, GPIO.HIGH)
+                time.sleep(delay)
+                GPIO.output(self.step_pin, GPIO.LOW)
+                GPIO.output(second_stepper_pin, GPIO.LOW)
+                time.sleep(delay)
+        

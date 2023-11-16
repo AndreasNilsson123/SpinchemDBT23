@@ -70,7 +70,7 @@ class Cradle:
         self.horizontal_motor.step(steps, delay)
         self.update_position(-steps, 0)
     
-    def update_position(self, direction_x, direction_zs):
+    def update_position(self, direction_x, direction_z):
         x,z = self.position.get_position()
         self.position.set_position(x+direction_x, z+direction_z)
     
@@ -87,7 +87,7 @@ class Cradle:
             if not self.vertical1_sensor.is_pressed():
                 self.vertical_motor_1.step(1, 0.005)
             if not self.vertical2_sensor.is_pressed():
-                self.vertical_motor_2.step(1, 0.005)
+                self.vertical_motor_2.step(1, 0.01)
             if self.vertical1_sensor.is_pressed() and self.vertical2_sensor.is_pressed():
                 break
         

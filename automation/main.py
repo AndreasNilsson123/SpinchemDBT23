@@ -5,6 +5,7 @@ from stirrer_motor import StirrerMotor
 from horizontalMotor import HorizontalMotor
 from verticalMotors import VerticalMotors
 from rbrDetection import rbrPocketDetection
+from cradle import Cradle
 from time import sleep
 
 GPIO.setmode(GPIO.BCM)
@@ -25,10 +26,9 @@ def setup_sensors(PIN1,PIN2,PIN3,PIN4):
     return pocket1_detection, pocket2_detection
 # Sensor pins
 #SENSOR_1_PIN = 10 ; SENSOR_2_PIN = 11 ; SENSOR_3_PIN = 12 ; SENSOR_4_PIN = 13
-def setup_motors(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir):
-    vertical_steppers = VerticalMotors(V1_step, V1_dir, V2_step, V2_dir)
-    horizontal_motor = HorizontalMotor(H_step, H_dir)
-    return vertical_steppers, horizontal_motor
+def setup_cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir):
+    cradle = Cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir, 1,2,3,4,5)
+    return cradle
 # Define GPIO pins for the stepper motors
 #VERTICAL_STEPPER_1_STEP_PIN = 22 ; VERTICAL_STEPPER_1_DIRECTION_PIN = 23
 #VERTICAL_STEPPER_2_STEP_PIN = 24 ; VERTICAL_STEPPER_2_DIRECTION_PIN = 25
@@ -135,7 +135,12 @@ def position_calibration(vertical_steppers: VerticalMotors, horizontal_motor: Ho
 # 8.4 CONDITIONS: Container must be empty
 
 # TEST CODE
-stirrer = setup_stirrer('/dev/ttyAMA0', 9600)
+cradle = setup_cradle(22,23, 24, 25, 17, 27)
+
+dist = 50 # 5cm
+nsteps = 160*dist
+delay = 0.01
+cradle.move_up(nsteps, delay)
     
 # Close the serial connection when done
 #stirrer.serial.close()

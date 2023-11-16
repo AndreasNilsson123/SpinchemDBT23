@@ -2,7 +2,7 @@ from stepper_controller import StepperMotor
 from switchButton import SwitchButton
 from position import Position
 
-class cradle:
+class Cradle:
     def __init__(self, step_v1, direction_v1, 
                  step_v2, direction_v2,
                  step_h1, direction_h1,

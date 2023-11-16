@@ -52,25 +52,25 @@ class Cradle:
         self.vertical_motor_1.set_direction("counterclockwise")
         self.vertical_motor_2.set_direction("counterclockwise")
         self.vertical_motor_1.step(steps, delay, self.stepper_motor2_pin)
-        self.update_position(self, steps, 0, -steps)
+        self.update_position(0, -steps)
         
     def move_down(self, steps, delay):
         self.vertical_motor_1.set_direction("clockwise")
         self.vertical_motor_2.set_direction("clockwise")
         self.vertical_motor_1.step(steps, delay, self.stepper_motor2_pin)
-        self.update_position(self, steps, 0, steps)
+        self.update_position(0, steps)
     
     def move_left(self, steps, delay):
         self.horizontal_motor.set_direction("clockwise")
         self.horizontal_motor.step(steps, delay)
-        self.update_position(self, steps, steps, 0)
+        self.update_position(steps, 0)
     
     def move_right(self, steps, delay):
         self.horizontal_motor.set_direction("counterclockwise")
         self.horizontal_motor.step(steps, delay)
-        self.update_position(self, steps, -steps, 0)
+        self.update_position(-steps, 0)
     
-    def update_position(self, direction_x, direction_z):
+    def update_position(self, direction_x, direction_zs):
         x,z = self.position.get_position()
         self.position.set_position(x+direction_x, z+direction_z)
     

@@ -57,7 +57,7 @@ class Cradle:
     def move_down(self, steps, delay):
         self.vertical_motor_1.set_direction("clockwise")
         self.vertical_motor_2.set_direction("clockwise")
-        self.vertical_motor_1.step(steps, delay)
+        self.vertical_motor_1.step(steps, delay, self.stepper_motor2_pin)
         self.update_position(self, steps, 0, steps)
     
     def move_left(self, steps, delay):

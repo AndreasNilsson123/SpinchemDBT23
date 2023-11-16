@@ -27,12 +27,12 @@ def setup_sensors(PIN1,PIN2,PIN3,PIN4):
 # Sensor pins
 #SENSOR_1_PIN = 10 ; SENSOR_2_PIN = 11 ; SENSOR_3_PIN = 12 ; SENSOR_4_PIN = 13
 def setup_cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir):
-    cradle = Cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir, 1,2,3,4,5)
+    cradle = Cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir, 5,6,13,19,26)
     return cradle
 # Define GPIO pins for the stepper motors
 #VERTICAL_STEPPER_1_STEP_PIN = 22 ; VERTICAL_STEPPER_1_DIRECTION_PIN = 23
 #VERTICAL_STEPPER_2_STEP_PIN = 24 ; VERTICAL_STEPPER_2_DIRECTION_PIN = 25
-#HORIZONTAL_STEPPER_STEP_PIN = 4 ; HORIZONTAL_STEPPER_DIRECTION_PIN = 5
+#HORIZONTAL_STEPPER_STEP_PIN = 4 ; HORIZONTAL_ 98 ++++++++++++++++STEPPER_DIRECTION_PIN = 5
 # Initialize valve and pump objects
 #valve_filling = Valve(VALVE1_PIN)
 #valve_emptying = Valve(VALVE2_PIN)
@@ -137,10 +137,11 @@ def position_calibration(vertical_steppers: VerticalMotors, horizontal_motor: Ho
 # TEST CODE
 cradle = setup_cradle(22,23, 24, 25, 17, 27)
 
-dist = 50 # 5cm
+dist = 40 # 15cm
 nsteps = 160*dist
-delay = 0.01
-cradle.move_up(nsteps, delay)
+delay = 0.001
+cradle.move_down(nsteps, delay)
+cradle.move_left(150, 0.01)
     
 # Close the serial connection when done
 #stirrer.serial.close()

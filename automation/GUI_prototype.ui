@@ -57,7 +57,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="rbrToVesse">
+      <widget class="QPushButton" name="rbrToVessel">
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -142,7 +142,7 @@
       <x>220</x>
       <y>180</y>
       <width>351</width>
-      <height>101</height>
+      <height>136</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">

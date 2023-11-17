@@ -1,14 +1,24 @@
 import RPi.GPIO as GPIO
 from valve import Valve
-from pump import Pump
 from stirrer_motor import StirrerMotor
-from horizontalMotor import HorizontalMotor
-from verticalMotors import VerticalMotors
 from rbrDetection import rbrPocketDetection
 from cradle import Cradle
 from time import sleep
+import sys
+import os
+from PyQt5.uic import loadUiType
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QDateEdit
+from PyQt5.QtGui import QColor
 
 GPIO.setmode(GPIO.BCM)
+# ------------------------------------------ #
+# ---------------- Setup GUI --------------- #
+# ------------------------------------------ #
+# Get the directory path where the script is located
+script_directory = os.path.dirname(os.path.abspath(__file__))
+GUI_prototype, _ = loadUiType(os.path.join(script_directory, "GUI_prototype.ui"))
+
 # ------------------------------------------ #
 # ----------- Initialize objects ----------- #
 # ------------------------------------------ #
@@ -79,70 +89,92 @@ def stirrer_command(stirrer: StirrerMotor, time: int, speed: int, command: str) 
     if not response == "1,HS,OK":
         raise Exception("Unexpected response from stirrer: " + response)
 
-def position_calibration(vertical_steppers: VerticalMotors, horizontal_motor: HorizontalMotor) -> None:
-    """
-    A function that calibrates the position of the vertical steppers and the horizontal motor.
-    
-    Parameters:
-        vertical_steppers: A VerticalMotors object representing the vertical steppers.
-        horizontal_motor: A HorizontalMotor object representing the horizontal motor.
-    Returns:
-        None
-    """
-    vertical_steppers.calibrate()
-    horizontal_motor.calibrate()
 
             
 # ------------------------------------------ #
 # --------------- Automation --------------- #
 # ------------------------------------------ #
-
+class Automation(QDialog, GUI_prototype):
+    def __init__(self):
+        super(Automation, self).__init()
+        self.setupUi(self)
+        # Step 1
+        self.pickUp.clicked.connect(self.pickUpNewRBR)
+        # Step 2
+        self.rbrToVessel.clicked.connect(self.moveRBRToVessel)
+        # Step 3
+        self.fillVessel.clicked.connect(self.fillTheVessel)
+        # Step 4
+        self.startMotor.clicked.connect(self.startStirrerMotor)
+        # Step 5
+        self.stopMotor.clicked.connect(self.stopStirrerMotor)
+        # Step 6
+        self.emptyVessel.clicked.connect(self.emptyTheVessel)
+        # Step 7
+        self.liftRbr.clicked.connect(self.liftRBRFromVessel)
+        # Step 8
+        self.leaveRbr.clicked.connect(self.leaveRBRInPocket)        
 # 1. Button for RBR pick-up
 # 1.1 Locate new RBR using sensors
 # 1.2 Move cradle to horizontal position of RBR
 # 1.3 Move cradle to vertical position of RBR
 # 1.4 Move cradle back to top vertical position
-
+    def pickUpNewRBR(self):
+        print("Picking up new RBR")
 # 2. Button for moving RBR to vessel
 # 2.1 Move cradle to horizontal position of vessel
 # 2.2 Move cradle to vertical position of vessel
-
+    def moveRBRToVessel(self):
+        print("Moving RBR to vessel")
 # 3. Fill the vessel with reagnet
 # 3.1 Open valve for filling vessel
 # 3.2 Keep the valve opend for a certain amount of time
 # 3.3 Close valve for filling vessel
 # 3.4 CONDITIONS: Vessel is empty from liquid
-
+    def fillTheVessel(self):
+        print("Filling vessel")
 # 4. Start stirrer motor
 # 4.1 Start stirrer motor with defined speed
 # 4.2 CONDITIONS: Motor must be in vessel
-
+    def startStirrerMotor(self):
+        print("Starting stirrer motor")
 # 5. Stop stirrer motor
 # 5.1 Stop stirrer motor
-
+    def stopStirrerMotor(self):
+        print("Stopping stirrer motor")
 # 6. Empty vessel from reagent
 # 6.1 Open valve for emptying vessel
 # 6.2 Keep the valve opend for a certain amount of time
 # 6.3 Close valve for emptying vessel
-
+    def emptyTheVessel(self):
+        print("Emptying vessel")
 # 7. Lift RBR from vessel
 # 7.1 Lift cradle to top vertical position
-
+    def liftRBRFromVessel(self):
+        print("Lifting RBR from vessel")
 # 8. Leave RBR into container
 # 8.1 Move RBR into horizontal position of desired container
 # 8.2 Move RBR into vertical position of desired container
 # 8.3 Move RBR back to top vertical position
 # 8.4 CONDITIONS: Container must be empty
-
-# TEST CODE
-cradle = setup_cradle(22,23, 24, 25, 17, 27)
-
-dist = 40 # 15cm
-nsteps = 160*dist
-delay = 0.001
-cradle.move_down(nsteps, delay)
-cradle.move_left(150, 0.01)
-    
+    def leaveRBRInPocket(self):
+        print("Leaving RBR in pocket")
+      
+# ------------------------------------------ #
+# --------------- Main --------------------- #
+# ------------------------------------------ #
+app = QApplication(sys.argv)
+GUI = Automation()
+widget = QtWidgets.QStackedWidget()
+widget.addWidget(GUI)
+widget.setFixedHeight(480)
+widget.setFixedWidth(800)
+widget.show()
+try:
+    sys.exit(app.exec_())
+except:
+    print("Exiting program")      
+        
 # Close the serial connection when done
 #stirrer.serial.close()
 # Clean up GPIO

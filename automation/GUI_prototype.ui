@@ -31,7 +31,7 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="startMotor">
+      <widget class="QPushButton" name="pickUp">
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -44,7 +44,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="fillVessel">
+      <widget class="QPushButton" name="rbrToVessel">
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -57,7 +57,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="rbrToVessel">
+      <widget class="QPushButton" name="fillVessel">
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -70,7 +70,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="leaveRbr">
+      <widget class="QPushButton" name="startMotor">
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -83,7 +83,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="liftRbr">
+      <widget class="QPushButton" name="stopMotor">
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -109,7 +109,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="stopMotor">
+      <widget class="QPushButton" name="liftRbr">
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -122,7 +122,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pickUp">
+      <widget class="QPushButton" name="leaveRbr">
        <property name="minimumSize">
         <size>
          <width>30</width>

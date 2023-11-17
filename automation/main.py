@@ -8,16 +8,16 @@ import sys
 import os
 from PyQt5.uic import loadUiType
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QDateEdit
+from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QMainWindow
+from PyQt5.uic import loadUi
 from PyQt5.QtGui import QColor
 
-GPIO.setmode(GPIO.BCM)
+#GPIO.setmode(GPIO.BCM)
 # ------------------------------------------ #
 # ---------------- Setup GUI --------------- #
 # ------------------------------------------ #
 # Get the directory path where the script is located
 script_directory = os.path.dirname(os.path.abspath(__file__))
-GUI_prototype, _ = loadUiType(os.path.join(script_directory, "GUI_prototype.ui"))
 
 # ------------------------------------------ #
 # ----------- Initialize objects ----------- #
@@ -27,32 +27,15 @@ def setup_valves(PIN1, PIN2):
     valve_filling = Valve(PIN1)
     valve_emptying = Valve(PIN2)
     return valve_filling, valve_emptying
-# Define GPIO pins for valve and pump
-#VALVE1_PIN = 17 ; VALVE2_PIN = 16
 
 def setup_sensors(PIN1,PIN2,PIN3,PIN4):
     pocket1_detection = rbrPocketDetection(PIN1, PIN2)
     pocket2_detection = rbrPocketDetection(PIN3, PIN4)
     return pocket1_detection, pocket2_detection
-# Sensor pins
-#SENSOR_1_PIN = 10 ; SENSOR_2_PIN = 11 ; SENSOR_3_PIN = 12 ; SENSOR_4_PIN = 13
+
 def setup_cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir):
     cradle = Cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir, 5,6,13,19,26)
     return cradle
-# Define GPIO pins for the stepper motors
-#VERTICAL_STEPPER_1_STEP_PIN = 22 ; VERTICAL_STEPPER_1_DIRECTION_PIN = 23
-#VERTICAL_STEPPER_2_STEP_PIN = 24 ; VERTICAL_STEPPER_2_DIRECTION_PIN = 25
-#HORIZONTAL_STEPPER_STEP_PIN = 4 ; HORIZONTAL_ 98 ++++++++++++++++STEPPER_DIRECTION_PIN = 5
-# Initialize valve and pump objects
-#valve_filling = Valve(VALVE1_PIN)
-#valve_emptying = Valve(VALVE2_PIN)
-# Pocket detection
-#pocket1_detection = rbrPocketDetection(SENSOR_1_PIN, SENSOR_2_PIN)
-#pocket2_detection = rbrPocketDetection(SENSOR_3_PIN, SENSOR_4_PIN)
-# Stepper controllers
-#vertical_steppers = VerticalMotors(VERTICAL_STEPPER_1_STEP_PIN, VERTICAL_STEPPER_1_DIRECTION_PIN
-#                                  ,VERTICAL_STEPPER_2_STEP_PIN, VERTICAL_STEPPER_2_DIRECTION_PIN )
-#horizontal_motor = HorizontalMotor(HORIZONTAL_STEPPER_STEP_PIN, HORIZONTAL_STEPPER_DIRECTION_PIN)
 
 def setup_stirrer(SERIAL_PORT, BAUDRATE):
     stirrer = StirrerMotor(SERIAL_PORT, BAUDRATE)
@@ -64,9 +47,9 @@ def setup_stirrer(SERIAL_PORT, BAUDRATE):
 # Initialize the stirrer motor object
 #stirrer = StirrerMotor(SERIAL_PORT, BAUDRATE)
 
-# ------------------------------------------ #
-# ------------- Help Methods --------------- #
-# ------------------------------------------ #
+# # ------------------------------------------ #
+# # ------------- Help Methods --------------- #
+# # ------------------------------------------ #
 def stirrer_command(stirrer: StirrerMotor, time: int, speed: int, command: str) -> None:
     """
     A function that sends a command to a stirrer motor.
@@ -94,10 +77,11 @@ def stirrer_command(stirrer: StirrerMotor, time: int, speed: int, command: str) 
 # ------------------------------------------ #
 # --------------- Automation --------------- #
 # ------------------------------------------ #
-class Automation(QDialog, GUI_prototype):
+class Automation(QMainWindow):
     def __init__(self):
-        super(Automation, self).__init()
-        self.setupUi(self)
+        super(Automation, self).__init__()
+        loadUi(os.path.join(script_directory, "GUI_prototype.ui"), self)
+        #self.setupUi(self)
         # Step 1
         self.pickUp.clicked.connect(self.pickUpNewRBR)
         # Step 2
@@ -178,7 +162,7 @@ except:
 # Close the serial connection when done
 #stirrer.serial.close()
 # Clean up GPIO
-GPIO.cleanup()
+#GPIO.cleanup()
 
 # More fixes
 # Fix so that switches <- horizontalMotor

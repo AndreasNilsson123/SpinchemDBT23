@@ -1,8 +1,8 @@
-import RPi.GPIO as GPIO
-from valve import Valve
-from stirrer_motor import StirrerMotor
-from rbrDetection import rbrPocketDetection
-from cradle import Cradle
+# import RPi.GPIO as GPIO
+# from valve import Valve
+# from stirrer_motor import StirrerMotor
+# from rbrDetection import rbrPocketDetection
+# from cradle import Cradle
 from time import sleep
 import sys
 import os
@@ -23,60 +23,54 @@ script_directory = os.path.dirname(os.path.abspath(__file__))
 # ----------- Initialize objects ----------- #
 # ------------------------------------------ #
 
-def setup_valves(PIN1, PIN2):
-    valve_filling = Valve(PIN1)
-    valve_emptying = Valve(PIN2)
-    return valve_filling, valve_emptying
+# def setup_valves(PIN1, PIN2):
+#     valve_filling = Valve(PIN1)
+#     valve_emptying = Valve(PIN2)
+#     return valve_filling, valve_emptying
 
-def setup_sensors(PIN1,PIN2,PIN3,PIN4):
-    pocket1_detection = rbrPocketDetection(PIN1, PIN2)
-    pocket2_detection = rbrPocketDetection(PIN3, PIN4)
-    return pocket1_detection, pocket2_detection
+# def setup_sensors(PIN1,PIN2,PIN3,PIN4):
+#     pocket1_detection = rbrPocketDetection(PIN1, PIN2)
+#     pocket2_detection = rbrPocketDetection(PIN3, PIN4)
+#     return pocket1_detection, pocket2_detection
 
-def setup_cradle(V1_step, V1_dir,
-                 V2_step, V2_dir,
-                 H_step, H_dir,
-                 sensor_v1, sensor_v2, 
-                 sensor_h1,
-                 vessel_sensor_y, vessel_sensor_x):
-    cradle = Cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir,
-                    sensor_v1, sensor_v2, sensor_h1,vessel_sensor_y, vessel_sensor_x)
-    return cradle
+# def setup_cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir):
+#     cradle = Cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir, 5,6,13,19,26)
+#     return cradle
 
-def setup_stirrer(SERIAL_PORT, BAUDRATE):
-    stirrer = StirrerMotor(SERIAL_PORT, BAUDRATE)
-    return stirrer
-# Define the serial port and baudrate
-#SERIAL_PORT = '/dev/ttyUSB0'  # Adjust based on your specific port
-#BAUDRATE = 9600  # Adjust based on your motor's specifications
+# def setup_stirrer(SERIAL_PORT, BAUDRATE):
+#     stirrer = StirrerMotor(SERIAL_PORT, BAUDRATE)
+#     return stirrer
+# # Define the serial port and baudrate
+# #SERIAL_PORT = '/dev/ttyUSB0'  # Adjust based on your specific port
+# #BAUDRATE = 9600  # Adjust based on your motor's specifications
 
-# Initialize the stirrer motor object
-#stirrer = StirrerMotor(SERIAL_PORT, BAUDRATE)
+# # Initialize the stirrer motor object
+# #stirrer = StirrerMotor(SERIAL_PORT, BAUDRATE)
 
-# # ------------------------------------------ #
-# # ------------- Help Methods --------------- #
-# # ------------------------------------------ #
-def stirrer_command(stirrer: StirrerMotor, time: int, speed: int, command: str) -> None:
-    """
-    A function that sends a command to a stirrer motor.
+# # # ------------------------------------------ #
+# # # ------------- Help Methods --------------- #
+# # # ------------------------------------------ #
+# def stirrer_command(stirrer: StirrerMotor, time: int, speed: int, command: str) -> None:
+#     """
+#     A function that sends a command to a stirrer motor.
     
-    Parameters:
-        stirrer: A StirrerMotor object representing the stirrer motor.
-        time: An integer representing the time (in seconds) to execute the command.
-        speed: An integer representing the speed of the stirrer motor.
-        command: A string representing the command to be sent to the stirrer motor.
-                ("Start" or "Stop")
-    Returns:
-        None
-    """
-    if command == "Start":
-        command = "1,WSE," + str(speed) + "\r\n"
-    elif command == "Stop":
-        command = "1,WSE,0\r\n" 
-    response = stirrer.send_command(command) # Fix input command
+#     Parameters:
+#         stirrer: A StirrerMotor object representing the stirrer motor.
+#         time: An integer representing the time (in seconds) to execute the command.
+#         speed: An integer representing the speed of the stirrer motor.
+#         command: A string representing the command to be sent to the stirrer motor.
+#                 ("Start" or "Stop")
+#     Returns:
+#         None
+#     """
+#     if command == "Start":
+#         command = "1,WSE," + str(speed) + "\r\n"
+#     elif command == "Stop":
+#         command = "1,WSE,0\r\n" 
+#     response = stirrer.send_command(command) # Fix input command
 
-    if not response == "1,HS,OK":
-        raise Exception("Unexpected response from stirrer: " + response)
+#     if not response == "1,HS,OK":
+#         raise Exception("Unexpected response from stirrer: " + response)
 
 
             
@@ -87,16 +81,9 @@ class Automation(QMainWindow):
     def __init__(self):
         super(Automation, self).__init__()
         loadUi(os.path.join(script_directory, "GUI_prototype.ui"), self)
-        # Define neccessary parameters
-        self.positionCalibration = False
-        
-        
-        # Setup pins
-        cradle = setup_cradle(V1_step=1, V1_dir=2, V2_step=3, V2_dir=4,
-                                    H_step=5, H_dir=6, sensor_v1=7, sensor_v2=8,
-                                    sensor_h1=9, vessel_sensor_y=10, vessel_sensor_x=11)
+        #self.setupUi(self)
         # Step 1
-        self.pickUp.clicked.connect(lambda: self.pickUpNewRBR(cradle))
+        self.pickUp.clicked.connect(self.pickUpNewRBR)
         # Step 2
         self.rbrToVessel.clicked.connect(self.moveRBRToVessel)
         # Step 3
@@ -110,21 +97,24 @@ class Automation(QMainWindow):
         # Step 7
         self.liftRbr.clicked.connect(self.liftRBRFromVessel)
         # Step 8
-        self.leaveRbr.clicked.connect(self.leaveRBRInPocket)        
-    
-    # 1. Button for RBR pick-up
-    def pickUpNewRBR(self, cradle):
-        # Run calibration
-        if not self.positionCalibration:
-            cradle.position_calibration()
-        # 1.1 Locate new RBR using sensors
-        # 1.2 Move cradle to horizontal position of RBR
-        # 1.3 Move cradle to vertical position of RBR
-        # 1.4 Move cradle back to top vertical position
-            
+        self.leaveRbr.clicked.connect(self.leaveRBRInPocket)
         
+        # Set the initial value of the QLineEdit to the lowest value of the slider
+        initial_value = self.stirrerSpeed.minimum()
+        self.dispStirrerSpeed.setText(str(initial_value))
         
-        
+        # Connect the slider valueChanged signal to the text box setText slot
+        self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
+
+    def on_slider_value_changed(self, value):
+        # Convert the integer value to a string and set it in the text box
+        self.dispStirrerSpeed.setText(str(value))        
+# 1. Button for RBR pick-up
+# 1.1 Locate new RBR using sensors
+# 1.2 Move cradle to horizontal position of RBR
+# 1.3 Move cradle to vertical position of RBR
+# 1.4 Move cradle back to top vertical position
+    def pickUpNewRBR(self):
         print("Picking up new RBR")
 # 2. Button for moving RBR to vessel
 # 2.1 Move cradle to horizontal position of vessel
@@ -168,8 +158,6 @@ class Automation(QMainWindow):
 # ------------------------------------------ #
 # --------------- Main --------------------- #
 # ------------------------------------------ #
-
-
 app = QApplication(sys.argv)
 GUI = Automation()
 widget = QtWidgets.QStackedWidget()

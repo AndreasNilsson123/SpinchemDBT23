@@ -14,7 +14,7 @@ class StirrerMotor:
         """
         self.serial = serial.Serial(port, baudrate)
         
-        self.serial.write("0,WSM,1\r\n".encode()) # Activate serial mode
+        self.serial.write("1,WSM,1\r\n".encode()) # Activate serial mode
         
         self.serial.timeout = 1  # Set timeout to 1 second (adjust as needed)
         

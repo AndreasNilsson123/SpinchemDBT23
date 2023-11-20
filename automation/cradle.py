@@ -78,8 +78,8 @@ class Cradle:
         return self.position.get_position()
         
     def position_calibration(self):
-        self.vertical_motor_1.set_direction("clockwise")
-        self.vertical_motor_2.set_direction("clockwise")
+        self.vertical_motor_1.set_direction("counterclockwise")
+        self.vertical_motor_2.set_direction("counterclockwise")
         self.horizontal_motor.set_direction("counterclockwise")
         
         # Run vertical motors to top position

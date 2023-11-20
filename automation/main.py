@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QMainWindow
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QColor
 
-#GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 # ------------------------------------------ #
 # ---------------- Setup GUI --------------- #
 # ------------------------------------------ #

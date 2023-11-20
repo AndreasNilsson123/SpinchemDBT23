@@ -92,13 +92,13 @@ class Automation(QMainWindow):
         
         
         # Setup pins
-        cradle = setup_cradle(V1_step=1, V1_dir=2, V2_step=3, V2_dir=4,
-                                    H_step=5, H_dir=6, sensor_v1=7, sensor_v2=8,
-                                    sensor_h1=9, vessel_sensor_y=10, vessel_sensor_x=11)
+        cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=22, V2_dir=23,
+                                    H_step=24, H_dir=25, sensor_v1=5, sensor_v2=6,
+                                    sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=26)
         # Step 1
         self.pickUp.clicked.connect(lambda: self.pickUpNewRBR(cradle))
         # Step 2
-        self.rbrToVessel.clicked.connect(self.moveRBRToVessel)
+        self.rbrToVessel.clicked.connect(lambda: self.moveRBRToVessel(cradle))
         # Step 3
         self.fillVessel.clicked.connect(self.fillTheVessel)
         # Step 4
@@ -126,12 +126,13 @@ class Automation(QMainWindow):
     # 1. Button for RBR pick-up
     def pickUpNewRBR(self, cradle):
         # Run calibration
-        if not self.positionCalibration:
-            cradle.position_calibration()
+        #if not self.positionCalibration:
+            #cradle.position_calibration()
         # 1.1 Locate new RBR using sensors
         # 1.2 Move cradle to horizontal position of RBR
         # 1.3 Move cradle to vertical position of RBR
         # 1.4 Move cradle back to top vertical position
+        cradle.move_down(150*160, 0.001)
             
         
         
@@ -140,8 +141,9 @@ class Automation(QMainWindow):
 # 2. Button for moving RBR to vessel
 # 2.1 Move cradle to horizontal position of vessel
 # 2.2 Move cradle to vertical position of vessel
-    def moveRBRToVessel(self):
+    def moveRBRToVessel(self, cradle):
         print("Moving RBR to vessel")
+        cradle.move_up(150*160, 0.001)
 # 3. Fill the vessel with reagnet
 # 3.1 Open valve for filling vessel
 # 3.2 Keep the valve opend for a certain amount of time

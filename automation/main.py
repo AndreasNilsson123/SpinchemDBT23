@@ -93,8 +93,8 @@ class Automation(QMainWindow):
         
         # Setup pins
         cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=22, V2_dir=23,
-                                    H_step=24, H_dir=25, sensor_v1=5, sensor_v2=6,
-                                    sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=26)
+                                    H_step=24, H_dir=25, sensor_v1=26, sensor_v2=21,
+                                    sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=20)
         # Step 1
         self.pickUp.clicked.connect(lambda: self.pickUpNewRBR(cradle))
         # Step 2

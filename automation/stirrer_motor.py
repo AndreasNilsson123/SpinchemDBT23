@@ -29,6 +29,6 @@ class StirrerMotor:
             str: The response from the serial device.
         """
         self.serial.write(command.encode())
-        response = self.serial.readline().decode().strip()
-        return response
+        #response = self.serial.readline().decode().strip()
+        #return response
 

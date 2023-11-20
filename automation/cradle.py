@@ -85,14 +85,14 @@ class Cradle:
         # Run vertical motors to top position
         while True:
             if not self.vertical1_sensor.is_pressed():
-                self.vertical_motor_1.step(1, 0.01)
+                self.vertical_motor_1.step(1, 0.005)
             if not self.vertical2_sensor.is_pressed():
-                self.vertical_motor_2.step(1, 0.01)
+                self.vertical_motor_2.step(1, 0.005)
             if self.vertical1_sensor.is_pressed() and self.vertical2_sensor.is_pressed():
                 break
         
         # Run Horizontal motor to most right position
-        while not self.horizontal_sensor.is_pressed():
-            self.horizontal_motor.step(1, 0.01)
+        #while not self.horizontal_sensor.is_pressed():
+         #   self.horizontal_motor.step(1, 0.01)
         
         

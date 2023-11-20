@@ -126,13 +126,13 @@ class Automation(QMainWindow):
     # 1. Button for RBR pick-up
     def pickUpNewRBR(self, cradle):
         # Run calibration
-        #if not self.positionCalibration:
-            #cradle.position_calibration()
+        if not self.positionCalibration:
+            cradle.position_calibration()
         # 1.1 Locate new RBR using sensors
         # 1.2 Move cradle to horizontal position of RBR
         # 1.3 Move cradle to vertical position of RBR
         # 1.4 Move cradle back to top vertical position
-        cradle.move_down(150*160, 0.001)
+        #cradle.move_down(150*160, 0.001)
             
         
         

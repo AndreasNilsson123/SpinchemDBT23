@@ -110,7 +110,18 @@ class Automation(QMainWindow):
         # Step 7
         self.liftRbr.clicked.connect(self.liftRBRFromVessel)
         # Step 8
-        self.leaveRbr.clicked.connect(self.leaveRBRInPocket)        
+        self.leaveRbr.clicked.connect(self.leaveRBRInPocket)
+        
+        # Set the initial value of the QLineEdit to the lowest value of the slider
+        initial_value = self.stirrerSpeed.minimum()
+        self.dispStirrerSpeed.setText(str(initial_value))
+        
+        # Connect the slider valueChanged signal to the text box setText slot
+        self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
+
+    def on_slider_value_changed(self, value):
+        # Convert the integer value to a string and set it in the text box
+        self.dispStirrerSpeed.setText(str(value))        
     
     # 1. Button for RBR pick-up
     def pickUpNewRBR(self, cradle):

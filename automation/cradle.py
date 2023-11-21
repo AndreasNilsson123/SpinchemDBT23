@@ -47,6 +47,9 @@ class Cradle:
         self.vertical_motor_1.set_direction("clockwise")
         self.vertical_motor_2.set_direction("clockwise")
         self.horizontal_motor.set_direction("clockwise")
+        
+        # NOTE: 160*z = number of steps to move z mm for vertical steppers
+        # NOTE: A*x = number of steps to move x mm for horizontal steppers
     
     def move_up(self, steps, delay):
         self.vertical_motor_1.set_direction("counterclockwise")
@@ -74,6 +77,20 @@ class Cradle:
         x,z = self.position.get_position()
         self.position.set_position(x+direction_x, z+direction_z)
     
+    def move_to_x_coord(self, target_x, delay):
+        no_steps = target_x - self.position.get_position_x()
+        if(no_steps > 0):
+            self.move_left(no_steps, delay)
+        else: 
+            self.move_right(abs(no_steps), delay)
+            
+    def move_to_z_coord(self, target_z, delay):
+        no_steps = target_z - self.position.get_position_z()
+        if(no_steps > 0):
+            self.move_up(no_steps, delay)
+        else: 
+            self.move_down(abs(no_steps), delay)
+    
     def get_position(self):
         return self.position.get_position()
         
@@ -92,7 +109,7 @@ class Cradle:
                 break
         
         # Run Horizontal motor to most right position
-        #while not self.horizontal_sensor.is_pressed():
-         #   self.horizontal_motor.step(1, 0.01)
+        while not self.horizontal_sensor.is_pressed():
+           self.horizontal_motor.step(1, 0.01)
         
         

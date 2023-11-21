@@ -20,4 +20,4 @@ class Vessel:
         self.valve_emptying.close()
         
     def get_position(self):
-        return self.position
+        return self.position.get_position()

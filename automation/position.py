@@ -18,6 +18,13 @@ class Position:
             Tuple: A tuple containing the x and z coordinates of the object.
         """
         return self.x, self.z
+    
+    def get_position_x(self):
+        return self.x
+    
+    def get_position_z(self):
+        return self.z
+    
     def set_position(self, x, z):
         """
         Set the position of the object in the x and z coordinates.

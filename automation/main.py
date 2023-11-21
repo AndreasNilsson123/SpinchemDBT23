@@ -11,6 +11,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog, QMainWindow
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QColor
+from PyQt5.QtCore import Qt
 
 GPIO.setmode(GPIO.BCM)
 # ------------------------------------------ #
@@ -45,13 +46,6 @@ def setup_cradle(V1_step, V1_dir,
 def setup_stirrer(SERIAL_PORT, BAUDRATE):
     stirrer = StirrerMotor(SERIAL_PORT, BAUDRATE)
     return stirrer
-# Define the serial port and baudrate
-#SERIAL_PORT = '/dev/ttyUSB0'  # Adjust based on your specific port
-#BAUDRATE = 9600  # Adjust based on your motor's specifications
-
-# Initialize the stirrer motor object
-#stirrer = StirrerMotor(SERIAL_PORT, BAUDRATE)
-
 # # ------------------------------------------ #
 # # ------------- Help Methods --------------- #
 # # ------------------------------------------ #
@@ -72,10 +66,6 @@ def stirrer_command(stirrer: StirrerMotor, speed: int, command: str) -> None:
         command = "1,WSE," + str(speed) + "\r\n"
     elif command == "Stop":
         command = "1,WSE,0\r\n" 
-    response = stirrer.send_command(command) # Fix input command
-
-    # if not response == "1,HS,OK":
-    #     raise Exception("Unexpected response from stirrer: " + response)
 
 
             
@@ -100,7 +90,7 @@ class Automation(QMainWindow):
         # Step 1
         self.pickUp.clicked.connect(lambda: self.pickUpNewRBR(cradle))
         # Step 2
-        self.rbrToVessel.clicked.connect(lambda: self.moveRBRToVessel(cradle))
+        self.rbrToVessel.clicked.connect(lambda: self.moveRBRToVessel(cradle, vessel))
         # Step 3
         self.fillVessel.clicked.connect(lambda: self.fillTheVessel(vessel))
         # Step 4
@@ -110,9 +100,9 @@ class Automation(QMainWindow):
         # Step 6
         self.emptyVessel.clicked.connect(lambda: self.emptyTheVessel(vessel))
         # Step 7
-        self.liftRbr.clicked.connect(self.liftRBRFromVessel)
+        self.liftRbr.clicked.connect(lambda: self.liftRBRFromVessel(cradle))
         # Step 8
-        self.leaveRbr.clicked.connect(self.leaveRBRInPocket)
+        self.leaveRbr.clicked.connect(lambda: self.leaveRBRInPocket(cradle))
         
         # Set the initial value of the QLineEdit to the lowest value of the slider
         initial_value = self.stirrerSpeed.minimum()
@@ -120,6 +110,30 @@ class Automation(QMainWindow):
         
         # Connect the slider valueChanged signal to the text box setText slot
         self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
+        
+        # Initial state
+        self.set_initial_button_color(self.pickUp, QColor(Qt.green))
+        self.set_initial_button_color(self.leaveRbr, QColor(Qt.red))
+        self.set_initial_button_color(self.rbrToVessel, QColor(Qt.red))
+        self.set_initial_button_color(self.fillVessel, QColor(Qt.red))
+        self.set_initial_button_color(self.startMotor, QColor(Qt.red))
+        self.set_initial_button_color(self.stopMotor, QColor(Qt.red))
+        self.set_initial_button_color(self.emptyVessel, QColor(Qt.red))
+        self.set_initial_button_color(self.liftRbr, QColor(Qt.red))
+    
+    def toggle_button_color(self, button):
+        # Toggle between green and red
+        if button.styleSheet() == "background-color: #00ff00;":
+            self.set_initial_button_color(button, QColor(Qt.red))
+        else:
+            self.set_initial_button_color(button, QColor(Qt.green))
+
+    def set_initial_button_color(self, button, color):
+        # Set the background color of the button
+        button.setStyleSheet(f"background-color: {color.name()};")
+
+        # Disable the button if the color is red
+        button.setEnabled(color != QColor(Qt.red))
 
     def on_slider_value_changed(self, value):
         # Convert the integer value to a string and set it in the text box
@@ -134,12 +148,27 @@ class Automation(QMainWindow):
         # 1.2 Move cradle to horizontal position of RBR
         # 1.3 Move cradle to vertical position of RBR
         # 1.4 Move cradle back to top vertical position
+        
+        # Change color of buttons
+        self.toggle_button_color(self.rbrToVessel)
+        self.toggle_button_color(self.pickUp)
 
 # 2. Button for moving RBR to vessel
 # 2.1 Move cradle to horizontal position of vessel
 # 2.2 Move cradle to vertical position of vessel
-    def moveRBRToVessel(self, cradle):
-        print("Moving RBR to vessel")
+    def moveRBRToVessel(self, cradle, vessel):
+        pos_x, pos_z = vessel.get_position()
+        # Move to horizontal position of vessel
+        cradle.move_to_x_coord(pos_x)
+        # Lower RBR intor vessel
+        cradle.move_to_z_coord(pos_z)
+        
+        self.toggle_button_color(self.fillVessel)
+        self.toggle_button_color(self.liftRbr)
+        self.toggle_button_color(self.startMotor)
+        self.toggle_button_color(self.stopMotor)
+        self.toggle_button_color(self.rbrToVessel)
+
 # 3. Fill the vessel with reagnet
 # 3.1 Open valve for filling vessel
 # 3.2 Keep the valve opend for a certain amount of time
@@ -149,6 +178,10 @@ class Automation(QMainWindow):
         vessel.open_filling()
         sleep(20)
         vessel.close_filling()
+        
+        self.toggle_button_color(self.fillVessel)
+        self.toggle_button_color(self.emptyVessel)
+        self.toggle_button_color(self.liftRbr)
 # 4. Start stirrer motor
 # 4.1 Start stirrer motor with defined speed
 # 4.2 CONDITIONS: Motor must be in vessel
@@ -167,10 +200,21 @@ class Automation(QMainWindow):
         vessel.open_emptying()
         sleep(20)
         vessel.close_emptying()
+        self.toggle_button_color(self.emptyVessel)
+        self.toggle_button_color(self.liftRbr)
 # 7. Lift RBR from vessel
 # 7.1 Lift cradle to top vertical position
     def liftRBRFromVessel(self):
         print("Lifting RBR from vessel")
+        
+        self.set_initial_button_color(self.pickUp, QColor(Qt.red))
+        self.set_initial_button_color(self.leaveRbr, QColor(Qt.green))
+        self.set_initial_button_color(self.rbrToVessel, QColor(Qt.red))
+        self.set_initial_button_color(self.fillVessel, QColor(Qt.red))
+        self.set_initial_button_color(self.startMotor, QColor(Qt.red))
+        self.set_initial_button_color(self.stopMotor, QColor(Qt.red))
+        self.set_initial_button_color(self.emptyVessel, QColor(Qt.red))
+        self.set_initial_button_color(self.liftRbr, QColor(Qt.red))
 # 8. Leave RBR into container
 # 8.1 Move RBR into horizontal position of desired container
 # 8.2 Move RBR into vertical position of desired container
@@ -178,6 +222,8 @@ class Automation(QMainWindow):
 # 8.4 CONDITIONS: Container must be empty
     def leaveRBRInPocket(self):
         print("Leaving RBR in pocket")
+        self.toggle_button_color(self.pickUp)
+        self.toggle_button_color(self.leaveRbr)
       
 # ------------------------------------------ #
 # --------------- Main --------------------- #

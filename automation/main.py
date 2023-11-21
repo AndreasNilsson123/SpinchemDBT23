@@ -204,7 +204,7 @@ class Automation(QMainWindow):
         self.toggle_button_color(self.liftRbr)
 # 7. Lift RBR from vessel
 # 7.1 Lift cradle to top vertical position
-    def liftRBRFromVessel(self):
+    def liftRBRFromVessel(self, cradle):
         print("Lifting RBR from vessel")
         
         self.set_initial_button_color(self.pickUp, QColor(Qt.red))
@@ -220,7 +220,7 @@ class Automation(QMainWindow):
 # 8.2 Move RBR into vertical position of desired container
 # 8.3 Move RBR back to top vertical position
 # 8.4 CONDITIONS: Container must be empty
-    def leaveRBRInPocket(self):
+    def leaveRBRInPocket(self, cradle):
         print("Leaving RBR in pocket")
         self.toggle_button_color(self.pickUp)
         self.toggle_button_color(self.leaveRbr)

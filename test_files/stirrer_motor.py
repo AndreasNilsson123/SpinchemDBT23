@@ -1,7 +1,7 @@
 import serial
 
 class StirrerMotor:
-    def __init__(self, port, baudrate):
+    def __init__(self, port = "/dev/serial0", baudrate=9600):
         """
         Initializes a new instance of the class.
 
@@ -12,11 +12,13 @@ class StirrerMotor:
         Returns:
             None
         """
-        self.serial = serial.Serial(port, baudrate)
-        
-        self.serial.write("1,WSM,1\r\n".encode()) # Activate serial mode
-        
-        self.serial.timeout = 1  # Set timeout to 1 second (adjust as needed)
+        self.serial = serial.Serial(
+            port=port,
+            baudrate=baudrate,
+            bytesize=serial.EIGHTBITS,  # 8 data bits
+            parity=serial.PARITY_NONE,  # No parity
+            stopbits=serial.STOPBITS_ONE  # 1 stop bit
+        )
         
     def send_command(self, command):
         """

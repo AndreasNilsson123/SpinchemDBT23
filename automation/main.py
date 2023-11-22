@@ -79,7 +79,7 @@ class Automation(QMainWindow):
         loadUi(os.path.join(script_directory, "GUI_prototype.ui"), self)
         # Define neccessary parameters
         self.positionCalibration = False
-        self.vertical_delay = 0.0005
+        self.vertical_delay = 0.00075
         self.horizontal_delay = 0.001
         
         # Setup pins

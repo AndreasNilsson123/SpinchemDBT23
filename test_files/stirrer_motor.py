@@ -19,6 +19,7 @@ class StirrerMotor:
             parity=serial.PARITY_NONE,  # No parity
             stopbits=serial.STOPBITS_ONE  # 1 stop bit
         )
+        self.serial.timeout = 5
         
     def send_command(self, command):
         """

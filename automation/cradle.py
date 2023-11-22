@@ -147,10 +147,10 @@ class Cradle:
             
     def move_to_z_coord(self, target_z, delay):
         no_steps = target_z - self.position.get_position_z()
-        if(no_steps > 0):
-            self.move_up(no_steps, delay)
+        if(no_steps < 0):
+            self.move_up(abs(no_steps), delay)
         else: 
-            self.move_down(abs(no_steps), delay)
+            self.move_down(no_steps, delay)
     
     def get_position(self):
         return self.position.get_position()

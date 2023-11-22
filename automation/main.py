@@ -206,7 +206,7 @@ class Automation(QMainWindow):
 # 7. Lift RBR from vessel
 # 7.1 Lift cradle to top vertical position
     def liftRBRFromVessel(self, cradle):
-        print("Lifting RBR from vessel")
+        cradle.move_to_z_coord(0, 0.001)
         
         self.set_initial_button_color(self.pickUp, QColor(Qt.red))
         self.set_initial_button_color(self.leaveRbr, QColor(Qt.green))

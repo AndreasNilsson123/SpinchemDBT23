@@ -79,7 +79,8 @@ class Automation(QMainWindow):
         loadUi(os.path.join(script_directory, "GUI_prototype.ui"), self)
         # Define neccessary parameters
         self.positionCalibration = False
-        
+        self.vertical_delay = 0.0005
+        self.horizontal_delay = 0.001
         
         # Setup pins
         cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=22, V2_dir=23,
@@ -160,9 +161,9 @@ class Automation(QMainWindow):
     def moveRBRToVessel(self, cradle, vessel):
         pos_x, pos_z = vessel.get_position()
         # Move to horizontal position of vessel
-        cradle.move_to_x_coord(pos_x, 0.001)
+        cradle.move_to_x_coord(pos_x, self.horizontal_delay)
         # Lower RBR intor vessel
-        cradle.move_to_z_coord(pos_z, 0.001)
+        cradle.move_to_z_coord(pos_z, self.vertical_delay)
         
         self.toggle_button_color(self.fillVessel)
         self.toggle_button_color(self.liftRbr)
@@ -206,7 +207,7 @@ class Automation(QMainWindow):
 # 7. Lift RBR from vessel
 # 7.1 Lift cradle to top vertical position
     def liftRBRFromVessel(self, cradle):
-        cradle.move_to_z_coord(0, 0.001)
+        cradle.move_to_z_coord(0, self.vertical_delay)
         
         self.set_initial_button_color(self.pickUp, QColor(Qt.red))
         self.set_initial_button_color(self.leaveRbr, QColor(Qt.green))

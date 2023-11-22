@@ -171,6 +171,8 @@ class Cradle:
         
         # Run Horizontal motor to most right position
         while not self.horizontal_sensor.is_pressed():
-           self.horizontal_motor.step(1, 0.002)
+           self.horizontal_motor.step(1, 0.001)
+        
+        print(self.get_position())
         
         

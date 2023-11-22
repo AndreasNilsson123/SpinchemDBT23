@@ -159,9 +159,9 @@ class Automation(QMainWindow):
     def moveRBRToVessel(self, cradle, vessel):
         pos_x, pos_z = vessel.get_position()
         # Move to horizontal position of vessel
-        cradle.move_to_x_coord(pos_x)
+        cradle.move_to_x_coord(pos_x, 0.001)
         # Lower RBR intor vessel
-        cradle.move_to_z_coord(pos_z)
+        cradle.move_to_z_coord(pos_z, 0.001)
         
         self.toggle_button_color(self.fillVessel)
         self.toggle_button_color(self.liftRbr)

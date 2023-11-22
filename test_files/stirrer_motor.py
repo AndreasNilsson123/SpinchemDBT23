@@ -35,7 +35,7 @@ class StirrerMotor:
         self.serial.write(command.encode())
         
         # Read the response from the serial device
-        response = self.serial.readline().decode('ascii').strip()
+        # response = self.serial.readline().decode('ascii').strip()
 
-        return response
+        # return response
 

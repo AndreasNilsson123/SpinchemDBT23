@@ -176,7 +176,7 @@ class Automation(QMainWindow):
 # 3.4 CONDITIONS: Vessel is empty from liquid
     def fillTheVessel(self, vessel):
         vessel.open_filling()
-        sleep(20)
+        sleep(40)
         vessel.close_filling()
         
         self.toggle_button_color(self.fillVessel)
@@ -198,7 +198,7 @@ class Automation(QMainWindow):
 # 6.3 Close valve for emptying vessel
     def emptyTheVessel(self, vessel):
         vessel.open_emptying()
-        sleep(20)
+        sleep(60)
         vessel.close_emptying()
         self.toggle_button_color(self.emptyVessel)
         self.toggle_button_color(self.liftRbr)

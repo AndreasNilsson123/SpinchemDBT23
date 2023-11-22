@@ -19,6 +19,7 @@ class StirrerMotor:
             parity=serial.PARITY_NONE,  # No parity
             stopbits=serial.STOPBITS_ONE  # 1 stop bit
         )
+        self.serial.write("1,WSM,1\r\n".encode()) # Activate serial mode
         self.serial.timeout = 5
         
     def send_command(self, command):
@@ -34,7 +35,7 @@ class StirrerMotor:
         self.serial.write(command.encode())
         
         # Read the response from the serial device
-        #response = self.serial.readline().decode('ascii').strip()
+        response = self.serial.readline().decode('ascii').strip()
 
-        #return response
+        return response
 

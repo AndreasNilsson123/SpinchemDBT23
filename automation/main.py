@@ -65,7 +65,8 @@ def stirrer_command(stirrer: StirrerMotor, speed: int, command: str) -> None:
     if command == "Start":
         command = "1,WSE," + str(speed) + "\r\n"
     elif command == "Stop":
-        command = "1,WSE,0\r\n" 
+        command = "1,WSE,0\r\n"
+    stirrer.send_command(command)
 
 
             

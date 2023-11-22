@@ -245,10 +245,4 @@ except:
 # Close the serial connection when done
 #stirrer.serial.close()
 # Clean up GPIO
-#GPIO.cleanup()
-
-# More fixes
-# Fix so that switches <- horizontalMotor
-# Fix so that switches <- verticalSteppers
-# And add calibration method to these classes
-# First calibration on verticalSteppers then one the horizontalMotor 
+GPIO.cleanup()

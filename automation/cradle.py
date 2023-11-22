@@ -52,32 +52,92 @@ class Cradle:
         # NOTE: A*x = number of steps to move x mm for horizontal steppers
     
     def move_up(self, steps, delay):
+        """
+        Move the object up by a specified number of steps with a given delay.
+
+        Parameters:
+            steps (int): The number of steps to move the object up.
+            delay (float): The delay between each step in seconds.
+
+        Returns:
+            None
+        """
         self.vertical_motor_1.set_direction("counterclockwise")
         self.vertical_motor_2.set_direction("counterclockwise")
         self.vertical_motor_1.step(steps, delay, self.stepper_motor2_pin)
         self.update_position(0, -steps)
         
     def move_down(self, steps, delay):
+        """
+        Move the object down by a certain number of steps at a specified delay.
+
+        Parameters:
+            steps (int): The number of steps to move down.
+            delay (float): The delay between each step.
+
+        Returns:
+            None
+        """
         self.vertical_motor_1.set_direction("clockwise")
         self.vertical_motor_2.set_direction("clockwise")
         self.vertical_motor_1.step(steps, delay, self.stepper_motor2_pin)
         self.update_position(0, steps)
     
     def move_left(self, steps, delay):
+        """
+        Move the object to the left by a specified number of steps with a given delay.
+
+        Args:
+            steps (int): The number of steps to move the object.
+            delay (float): The delay in seconds between each step.
+
+        Returns:
+            None
+        """
         self.horizontal_motor.set_direction("clockwise")
         self.horizontal_motor.step(steps, delay)
         self.update_position(steps, 0)
     
     def move_right(self, steps, delay):
+        """
+        Move the object to the right by a given number of steps with a specified delay.
+
+        Parameters:
+            steps (int): The number of steps to move the object to the right.
+            delay (float): The delay between each step in seconds.
+
+        Returns:
+            None
+        """
         self.horizontal_motor.set_direction("counterclockwise")
         self.horizontal_motor.step(steps, delay)
         self.update_position(-steps, 0)
     
     def update_position(self, direction_x, direction_z):
+        """
+        Updates the position of the object based on the given direction values.
+
+        Parameters:
+            direction_x (float): The amount to move the object along the x-axis.
+            direction_z (float): The amount to move the object along the z-axis.
+
+        Returns:
+            None
+        """
         x,z = self.position.get_position()
         self.position.set_position(x+direction_x, z+direction_z)
     
     def move_to_x_coord(self, target_x, delay):
+        """
+        Moves the object to the specified x coordinate.
+
+        Parameters:
+            target_x (int): The target x coordinate to move to.
+            delay (float): The delay between each step of the movement.
+
+        Returns:
+            None
+        """
         no_steps = target_x - self.position.get_position_x()
         if(no_steps > 0):
             self.move_left(no_steps, delay)

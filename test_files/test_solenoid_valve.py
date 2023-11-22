@@ -11,7 +11,7 @@ from time import sleep
 GPIO.setmode(GPIO.BCM)
 #This sets up the GPIO 18 pin as an output pin
 GPIO.setup(18, GPIO.OUT)
-GPIO.setup(15, GPIO.OUT)
+GPIO.setup(16, GPIO.OUT)
 
 while (True):    
     
@@ -26,7 +26,7 @@ while (True):
     #This Turns Relay Off. Brings Voltage to Max GPIO can output ~3.3V
     GPIO.output(15, 1)
     #Wait 1 Seconds
-    sleep(1)
+    sleep(25)
     #Turns Relay On. Brings Voltage to Min GPIO can output ~0V.
     GPIO.output(15, 0)
     #Wait 1 Seconds

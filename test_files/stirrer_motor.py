@@ -21,6 +21,10 @@ class StirrerMotor:
         )
         self.serial.write("1,WSM,1\r\n".encode()) # Activate serial mode
         self.serial.timeout = 5
+    
+    def is_connection_open(self):
+        # Check if the connection is open
+        return self.serial.is_open
         
     def send_command(self, command):
         """

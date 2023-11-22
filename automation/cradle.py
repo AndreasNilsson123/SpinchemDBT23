@@ -49,7 +49,8 @@ class Cradle:
         self.horizontal_motor.set_direction("clockwise")
         
         # NOTE: 160*z = number of steps to move z mm for vertical steppers
-        # NOTE: A*x = number of steps to move x mm for horizontal steppers
+        # NOTE: 5*x = number of steps to move x mm for horizontal steppers
+        # 500 / 100.3 = 4.99 approx = 5 steps per mm 
     
     def move_up(self, steps, delay):
         """

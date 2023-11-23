@@ -82,18 +82,34 @@ class Automation(QMainWindow):
         self.positionCalibration = False
         self.vertical_delay = 0.001
         self.horizontal_delay = 0.001
+        self.current_pocket = 0
+        
+        # Position of objects
+        vessel_x = 268*5
+        vessel_y = 122*160
+        
+        pocket1_x = 128.6*5
+        pocket1_y = 126*160
+        
+        pocket2_x = 0*5
+        pocket2_y = 126*160
         
         # Setup pins
         cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=22, V2_dir=23,
                                     H_step=24, H_dir=25, sensor_v1=26, sensor_v2=21,
                                     sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=20)
-        vessel = setup_vessel(PIN1=18, PIN2=16, coord_x=268*5, coord_y=122*160)
+        vessel = setup_vessel(PIN1=18, PIN2=16,
+                              coord_x=vessel_x, coord_y=vessel_y)
         
-        pocket1, pocket2 = setup_sensors(8,9,10,11, 128.6*5, 126*160, 0*5, 0*160)
+        pocket1, pocket2 = setup_sensors(PIN1 = 8, PIN2 = 9,
+                                         PIN3 = 10, PIN4 = 11, 
+                                         coord_x1 = pocket1_x, coord_y1 = pocket1_y, 
+                                         coord_x2 = pocket2_x, coord_y2 = pocket2_y)
+        pockets = [pocket1, pocket2]
         
         stirrer = setup_stirrer('/dev/serial0', 9600)
         # Step 1
-        self.pickUp.clicked.connect(lambda: self.pickUpNewRBR(cradle, pocket1))
+        self.pickUp.clicked.connect(lambda: self.pickUpNewRBR(cradle, pockets))
         # Step 2
         self.rbrToVessel.clicked.connect(lambda: self.moveRBRToVessel(cradle, vessel))
         # Step 3
@@ -107,7 +123,7 @@ class Automation(QMainWindow):
         # Step 7
         self.liftRbr.clicked.connect(lambda: self.liftRBRFromVessel(cradle))
         # Step 8
-        self.leaveRbr.clicked.connect(lambda: self.leaveRBRInPocket(cradle, pocket1))
+        self.leaveRbr.clicked.connect(lambda: self.leaveRBRInPocket(cradle, pockets))
         
         # Set the initial value of the QLineEdit to the lowest value of the slider
         initial_value = self.stirrerSpeed.minimum()
@@ -145,17 +161,14 @@ class Automation(QMainWindow):
         self.dispStirrerSpeed.setText(str(value))        
     
     # 1. Button for RBR pick-up
-    def pickUpNewRBR(self, cradle, pocket1):
+    def pickUpNewRBR(self, cradle, pockets):
         # Run calibration
         if not self.positionCalibration:
             cradle.position_calibration()
             self.positionCalibration = True
             sleep(1.5)
-        # 1.1 Locate new RBR using sensors
-        # 1.2 Move cradle to horizontal position of RBR
-        # 1.3 Move cradle to vertical position of RBR
-        # 1.4 Move cradle back to top vertical position
-        pos_x, pos_z = pocket1.get_position_retrive()
+        pocket = pockets[self.current_pocket]
+        pos_x, pos_z = pocket.get_position_retrive()
         cradle.move_to_x_coord(pos_x, self.horizontal_delay)
         cradle.move_to_z_coord(pos_z, self.vertical_delay)
         sleep(1)
@@ -174,18 +187,13 @@ class Automation(QMainWindow):
         # Lower RBR intor vessel
         cradle.move_to_z_coord(pos_z, self.vertical_delay)
 
-        
         self.toggle_button_color(self.fillVessel)
         self.toggle_button_color(self.liftRbr)
         self.toggle_button_color(self.startMotor)
         self.toggle_button_color(self.stopMotor)
         self.toggle_button_color(self.rbrToVessel)
 
-# 3. Fill the vessel with reagnet
-# 3.1 Open valve for filling vessel
-# 3.2 Keep the valve opend for a certain amount of time
-# 3.3 Close valve for filling vessel
-# 3.4 CONDITIONS: Vessel is empty from liquid
+
     def fillTheVessel(self, vessel):
         vessel.open_filling()
         sleep(40)
@@ -194,28 +202,22 @@ class Automation(QMainWindow):
         self.toggle_button_color(self.fillVessel)
         self.toggle_button_color(self.emptyVessel)
         self.toggle_button_color(self.liftRbr)
-# 4. Start stirrer motor
-# 4.1 Start stirrer motor with defined speed
-# 4.2 CONDITIONS: Motor must be in vessel
+
     def startStirrerMotor(self, stirrer):
         stirrer_command(stirrer,self.stirrerSpeed.value(), "Start")
-# 5. Stop stirrer motor
-# 5.1 Stop stirrer motor
+
     def stopStirrerMotor(self, stirrer):
         stirrer_command(stirrer,0, "Stop")
         
-# 6. Empty vessel from reagent
-# 6.1 Open valve for emptying vessel
-# 6.2 Keep the valve opend for a certain amount of time
-# 6.3 Close valve for emptying vessel
+
     def emptyTheVessel(self, vessel):
         vessel.open_emptying()
         sleep(60)
         vessel.close_emptying()
         self.toggle_button_color(self.emptyVessel)
         self.toggle_button_color(self.liftRbr)
-# 7. Lift RBR from vessel
-# 7.1 Lift cradle to top vertical position
+
+
     def liftRBRFromVessel(self, cradle):
         cradle.move_to_z_coord(0, self.vertical_delay)
         
@@ -227,18 +229,19 @@ class Automation(QMainWindow):
         self.set_initial_button_color(self.stopMotor, QColor(Qt.red))
         self.set_initial_button_color(self.emptyVessel, QColor(Qt.red))
         self.set_initial_button_color(self.liftRbr, QColor(Qt.red))
-# 8. Leave RBR into container
-# 8.1 Move RBR into horizontal position of desired container
-# 8.2 Move RBR into vertical position of desired container
-# 8.3 Move RBR back to top vertical position
-# 8.4 CONDITIONS: Container must be empty
-    def leaveRBRInPocket(self, cradle, pocket1):
-        pos_x, pos_z = pocket1.get_position_leave()
+
+    def leaveRBRInPocket(self, cradle, pockets):
+        pocket = pockets[self.current_pocket]
+        pos_x, pos_z = pocket.get_position_leave()
         cradle.move_to_x_coord(pos_x, self.horizontal_delay)
         cradle.move_to_z_coord(pos_z, self.vertical_delay)
         sleep(1)
         cradle.move_to_z_coord(0, self.vertical_delay)
-        self.toggle_button_color(self.pickUp)
+        
+        # Update to pocket number 2
+        self.current_pocket += 1
+        if self.current_pocket <= len(pockets):
+            self.toggle_button_color(self.pickUp)
         self.toggle_button_color(self.leaveRbr)
       
 # ------------------------------------------ #

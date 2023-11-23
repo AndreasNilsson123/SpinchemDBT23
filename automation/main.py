@@ -89,7 +89,7 @@ class Automation(QMainWindow):
                                     sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=20)
         vessel = setup_vessel(PIN1=18, PIN2=16, coord_x=268*5, coord_y=127*160)
         
-        pocket1, pocket2 = setup_sensors(8,9,10,11, 125*5, 100*160, 0*5, 0*160)
+        pocket1, pocket2 = setup_sensors(8,9,10,11, 126*5, 130*160, 0*5, 0*160)
         
         stirrer = setup_stirrer('/dev/serial0', 9600)
         # Step 1
@@ -149,6 +149,7 @@ class Automation(QMainWindow):
         # Run calibration
         if not self.positionCalibration:
             cradle.position_calibration()
+            sleep(1.5)
         # 1.1 Locate new RBR using sensors
         # 1.2 Move cradle to horizontal position of RBR
         # 1.3 Move cradle to vertical position of RBR

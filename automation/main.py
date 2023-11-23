@@ -149,6 +149,7 @@ class Automation(QMainWindow):
         # Run calibration
         if not self.positionCalibration:
             cradle.position_calibration()
+            self.positionCalibration = True
             sleep(1.5)
         # 1.1 Locate new RBR using sensors
         # 1.2 Move cradle to horizontal position of RBR

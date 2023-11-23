@@ -9,7 +9,7 @@ class rbrPocketDetection():
         self.sensor1 = ForceSensor(sensor1_pin) # Top sensor
         self.sensor2 = ForceSensor(sensor2_pin) # Bottom sensor
         self.position = Position(coord_x, coord_y)
-        factor = ...
+        factor = 1
         self.position_leave = Position(coord_x, coord_y-factor)
         
     def detect_rbr(self):

@@ -89,7 +89,7 @@ class Automation(QMainWindow):
                                     sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=20)
         vessel = setup_vessel(PIN1=18, PIN2=16, coord_x=268*5, coord_y=124*160)
         
-        pocket1, pocket2 = setup_sensors(8,9,10,11, 128*5, 129*160, 0*5, 0*160)
+        pocket1, pocket2 = setup_sensors(8,9,10,11, 128*5, 126*160, 0*5, 0*160)
         
         stirrer = setup_stirrer('/dev/serial0', 9600)
         # Step 1

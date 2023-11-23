@@ -89,7 +89,7 @@ class Automation(QMainWindow):
                                     sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=20)
         vessel = setup_vessel(PIN1=18, PIN2=16, coord_x=268*5, coord_y=127*160)
         
-        pocket1, pocket2 = setup_sensors(8,9,10,11, 126*5, 130*160, 0*5, 0*160)
+        pocket1, pocket2 = setup_sensors(8,9,10,11, 126*5, 132*160, 0*5, 0*160)
         
         stirrer = setup_stirrer('/dev/serial0', 9600)
         # Step 1
@@ -107,7 +107,7 @@ class Automation(QMainWindow):
         # Step 7
         self.liftRbr.clicked.connect(lambda: self.liftRBRFromVessel(cradle))
         # Step 8
-        self.leaveRbr.clicked.connect(lambda: self.leaveRBRInPocket(cradle))
+        self.leaveRbr.clicked.connect(lambda: self.leaveRBRInPocket(cradle, pocket1))
         
         # Set the initial value of the QLineEdit to the lowest value of the slider
         initial_value = self.stirrerSpeed.minimum()
@@ -157,6 +157,8 @@ class Automation(QMainWindow):
         pos_x, pos_z = pocket1.get_position_retrive()
         cradle.move_to_x_coord(pos_x, self.horizontal_delay)
         cradle.move_to_z_coord(pos_z, self.vertical_delay)
+        sleep(1)
+        cradle.move_to_z_coord(0, self.vertical_delay)
         # Change color of buttons
         self.toggle_button_color(self.rbrToVessel)
         self.toggle_button_color(self.pickUp)
@@ -170,6 +172,7 @@ class Automation(QMainWindow):
         cradle.move_to_x_coord(pos_x, self.horizontal_delay)
         # Lower RBR intor vessel
         cradle.move_to_z_coord(pos_z, self.vertical_delay)
+
         
         self.toggle_button_color(self.fillVessel)
         self.toggle_button_color(self.liftRbr)
@@ -228,8 +231,12 @@ class Automation(QMainWindow):
 # 8.2 Move RBR into vertical position of desired container
 # 8.3 Move RBR back to top vertical position
 # 8.4 CONDITIONS: Container must be empty
-    def leaveRBRInPocket(self, cradle):
-        print("Leaving RBR in pocket")
+    def leaveRBRInPocket(self, cradle, pocket1):
+        pos_x, pos_z = pocket1.get_position_leave()
+        cradle.move_to_x_coord(pos_x, self.horizontal_delay)
+        cradle.move_to_z_coord(pos_z, self.vertical_delay)
+        sleep(1)
+        cradle.move_to_z_coord(0, self.vertical_delay)
         self.toggle_button_color(self.pickUp)
         self.toggle_button_color(self.leaveRbr)
       

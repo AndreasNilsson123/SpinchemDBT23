@@ -20,7 +20,7 @@ class rbrPocketDetection():
             return False
     
     def get_position_retrive(self):
-        return self.position
+        return self.position.get_position()
     
     def get_position_leave(self):
-        return self.position_leave
+        return self.position_leave.get_position()

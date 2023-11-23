@@ -87,9 +87,9 @@ class Automation(QMainWindow):
         cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=22, V2_dir=23,
                                     H_step=24, H_dir=25, sensor_v1=26, sensor_v2=21,
                                     sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=20)
-        vessel = setup_vessel(PIN1=18, PIN2=16, coord_x=268*5, coord_y=127*160)
+        vessel = setup_vessel(PIN1=18, PIN2=16, coord_x=268*5, coord_y=124*160)
         
-        pocket1, pocket2 = setup_sensors(8,9,10,11, 127*5, 132*160, 0*5, 0*160)
+        pocket1, pocket2 = setup_sensors(8,9,10,11, 127*5, 129*160, 0*5, 0*160)
         
         stirrer = setup_stirrer('/dev/serial0', 9600)
         # Step 1

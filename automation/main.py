@@ -28,9 +28,9 @@ def setup_vessel(PIN1, PIN2, coord_x, coord_y):
     vessel = Vessel(PIN1,PIN2, coord_x, coord_y)
     return vessel
 
-def setup_sensors(PIN1,PIN2,PIN3,PIN4):
-    pocket1_detection = rbrPocketDetection(PIN1, PIN2)
-    pocket2_detection = rbrPocketDetection(PIN3, PIN4)
+def setup_sensors(PIN1,PIN2,PIN3,PIN4, coord_x1, coord_y1, coord_x2, coord_y2):
+    pocket1_detection = rbrPocketDetection(PIN1, PIN2, coord_x=coord_x1, coord_y=coord_y1)
+    pocket2_detection = rbrPocketDetection(PIN3, PIN4, coord_x=coord_x2, coord_y=coord_y2)
     return pocket1_detection, pocket2_detection
 
 def setup_cradle(V1_step, V1_dir,
@@ -89,9 +89,11 @@ class Automation(QMainWindow):
                                     sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=20)
         vessel = setup_vessel(PIN1=18, PIN2=16, coord_x=268*5, coord_y=127*160)
         
+        pocket1, pocket2 = setup_sensors(8,9,10,11, 120*5, 95*160, 0*5, 0*160)
+        
         stirrer = setup_stirrer('/dev/serial0', 9600)
         # Step 1
-        self.pickUp.clicked.connect(lambda: self.pickUpNewRBR(cradle))
+        self.pickUp.clicked.connect(lambda: self.pickUpNewRBR(cradle, pocket1))
         # Step 2
         self.rbrToVessel.clicked.connect(lambda: self.moveRBRToVessel(cradle, vessel))
         # Step 3
@@ -143,7 +145,7 @@ class Automation(QMainWindow):
         self.dispStirrerSpeed.setText(str(value))        
     
     # 1. Button for RBR pick-up
-    def pickUpNewRBR(self, cradle):
+    def pickUpNewRBR(self, cradle, pocket1):
         # Run calibration
         if not self.positionCalibration:
             cradle.position_calibration()
@@ -151,7 +153,9 @@ class Automation(QMainWindow):
         # 1.2 Move cradle to horizontal position of RBR
         # 1.3 Move cradle to vertical position of RBR
         # 1.4 Move cradle back to top vertical position
-        
+        pos_x, pos_y = pocket1.get_position_retrive()
+        cradle.move_to_x_coord(pos_x, self.horizontal_delay)
+        cradle.move_to_y_coord(pos_y, self.vertical_delay)
         # Change color of buttons
         self.toggle_button_color(self.rbrToVessel)
         self.toggle_button_color(self.pickUp)

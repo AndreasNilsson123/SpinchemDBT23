@@ -153,9 +153,9 @@ class Automation(QMainWindow):
         # 1.2 Move cradle to horizontal position of RBR
         # 1.3 Move cradle to vertical position of RBR
         # 1.4 Move cradle back to top vertical position
-        pos_x, pos_y = pocket1.get_position_retrive()
+        pos_x, pos_z = pocket1.get_position_retrive()
         cradle.move_to_x_coord(pos_x, self.horizontal_delay)
-        cradle.move_to_y_coord(pos_y, self.vertical_delay)
+        cradle.move_to_z_coord(pos_z, self.vertical_delay)
         # Change color of buttons
         self.toggle_button_color(self.rbrToVessel)
         self.toggle_button_color(self.pickUp)

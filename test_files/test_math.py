@@ -1,1 +1,1 @@
-print(int(31.6*5))
+print(type(31.6*5))

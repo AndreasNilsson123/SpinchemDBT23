@@ -88,7 +88,7 @@ class Automation(QMainWindow):
         vessel_x = 268*5
         vessel_y = 122*160
         
-        pocket1_x = int(128.6*5)
+        pocket1_x = int(128.4*5)
         pocket1_y = 131*160
         
         pocket2_x = int(28.4*5)

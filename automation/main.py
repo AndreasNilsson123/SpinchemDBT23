@@ -88,10 +88,10 @@ class Automation(QMainWindow):
         vessel_x = 268*5
         vessel_y = 122*160
         
-        pocket1_x = 128.6*5
+        pocket1_x = int(128.6*5)
         pocket1_y = 126*160
         
-        pocket2_x = 0*5
+        pocket2_x = int(31.6*5)
         pocket2_y = 126*160
         
         # Setup pins
@@ -240,7 +240,7 @@ class Automation(QMainWindow):
         
         # Update to pocket number 2
         self.current_pocket += 1
-        if self.current_pocket <= len(pockets):
+        if self.current_pocket < len(pockets):
             self.toggle_button_color(self.pickUp)
         self.toggle_button_color(self.leaveRbr)
       

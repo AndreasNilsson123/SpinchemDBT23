@@ -89,10 +89,10 @@ class Automation(QMainWindow):
         vessel_y = 122*160
         
         pocket1_x = int(128.6*5)
-        pocket1_y = 126*160
+        pocket1_y = 128*160
         
         pocket2_x = int(31.6*5)
-        pocket2_y = 126*160
+        pocket2_y = 128*160
         
         # Setup pins
         cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=22, V2_dir=23,

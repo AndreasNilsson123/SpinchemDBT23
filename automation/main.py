@@ -82,7 +82,7 @@ class Automation(QMainWindow):
         self.positionCalibration = False
         self.vertical_delay = 0.001
         self.horizontal_delay = 0.001
-        self.current_pocket = 0
+        self.current_pocket = 1
         
         # Position of objects
         vessel_x = 268*5

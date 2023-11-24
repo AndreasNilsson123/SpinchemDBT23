@@ -91,7 +91,7 @@ class Automation(QMainWindow):
         pocket1_x = int(128.6*5)
         pocket1_y = 131*160
         
-        pocket2_x = int(29.6*5)
+        pocket2_x = int(28.4*5)
         pocket2_y = 131*160
         
         # Setup pins

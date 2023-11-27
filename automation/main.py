@@ -80,7 +80,7 @@ class Automation(QMainWindow):
         loadUi(os.path.join(script_directory, "GUI_prototype.ui"), self)
         # Define neccessary parameters
         self.positionCalibration = False
-        self.vertical_delay = 0.0015
+        self.vertical_delay = 0.001
         self.horizontal_delay = 0.001
         self.current_pocket = 1
         
@@ -91,7 +91,7 @@ class Automation(QMainWindow):
         pocket1_x = int(128.4*5)
         pocket1_y = 131*160
         
-        pocket2_x = int(28.4*5)
+        pocket2_x = int(28.8*5)
         pocket2_y = 131*160
         
         # Setup pins

@@ -82,7 +82,7 @@ class Automation(QMainWindow):
         self.positionCalibration = False
         self.vertical_delay = 0.001
         self.horizontal_delay = 0.001
-        self.current_pocket = 1
+        self.current_pocket = 0
         
         # Position of objects
         vessel_x = 268*5
@@ -101,7 +101,7 @@ class Automation(QMainWindow):
         vessel = setup_vessel(PIN1=18, PIN2=16,
                               coord_x=vessel_x, coord_y=vessel_y)
         
-        pocket1, pocket2 = setup_sensors(PIN1 = 8, PIN2 = 9,
+        pocket2, pocket1 = setup_sensors(PIN1 = 8, PIN2 = 9,
                                          PIN3 = 10, PIN4 = 11, 
                                          coord_x1 = pocket1_x, coord_y1 = pocket1_y, 
                                          coord_x2 = pocket2_x, coord_y2 = pocket2_y)

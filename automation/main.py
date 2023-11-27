@@ -81,7 +81,7 @@ class Automation(QMainWindow):
         # Define neccessary parameters
         self.positionCalibration = False
         self.vertical_delay = 0.001
-        self.horizontal_delay = 0.001
+        self.horizontal_delay = 0.005
         self.current_pocket = 0
         
         # Position of objects

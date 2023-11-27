@@ -143,6 +143,15 @@ class Automation(QMainWindow):
         self.set_initial_button_color(self.liftRbr, QColor(Qt.red))
     
     def toggle_button_color(self, button):
+        """
+        Toggles the color of a button between green and red.
+
+        Args:
+            button: The button to toggle the color of.
+
+        Returns:
+            None
+        """
         # Toggle between green and red
         if button.styleSheet() == "background-color: #00ff00;":
             self.set_initial_button_color(button, QColor(Qt.red))

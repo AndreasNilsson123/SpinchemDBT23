@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import threading
 from vessel import Vessel
 from stirrer_motor import StirrerMotor
 from rbrDetection import rbrPocketDetection
@@ -24,7 +25,7 @@ script_directory = os.path.dirname(os.path.abspath(__file__))
 # ----------- Initialize objects ----------- #
 # ------------------------------------------ #
 
-def setup_vessel(PIN1, PIN2, coord_x, coord_y):
+def setup_vessel(PIN1, PIN2, coord_x, coord_y): # REVISION: 
     vessel = Vessel(PIN1,PIN2, coord_x, coord_y)
     return vessel
 
@@ -38,7 +39,7 @@ def setup_cradle(V1_step, V1_dir,
                  H_step, H_dir,
                  sensor_v1, sensor_v2, 
                  sensor_h1,
-                 vessel_sensor_y, vessel_sensor_x):
+                 vessel_sensor_y, vessel_sensor_x): # REVISION:
     cradle = Cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir,
                     sensor_v1, sensor_v2, sensor_h1,vessel_sensor_y, vessel_sensor_x)
     return cradle
@@ -82,14 +83,18 @@ class Automation(QMainWindow):
         # Position of objects
         vessel_x = 268*5
         vessel_y = 122*160
-        
         pocket1_x = int(128.4*5)
-        pocket1_y = 131*160
-        
+        pocket1_y = int(131*160)
         pocket2_x = int(28.6*5)
-        pocket2_y = 131*160
+        pocket2_y = int(131*160)
         
-        # setup pins
+        # Other variables
+        self.vesselVolume = 300
+        self.acidVolume = 5
+        self.emptyTime = 30
+        self.dryingTime = 10
+        
+        # Needs changing
         cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=22, V2_dir=23,
                                     H_step=24, H_dir=25, sensor_v1=26, sensor_v2=21,
                                     sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=20)
@@ -106,10 +111,113 @@ class Automation(QMainWindow):
         
         # Start process
         self.stopButton.setEnabled(False)
-        self.startButton.clicked.connect(lambda: self.startProcess(cradle, vessel, pockets, stirrer))
-        
-        def startProcess(cradle, vessel, pockets, stirrer):
-            # Initiate buttons
+        self.startButton.clicked.connect(lambda: self.start_process(cradle, vessel, pockets, stirrer))
+        self.stopButton.clicked.connect(self.stop_process)
+
+    def start_process(self,cradle, vessel, pockets, stirrer):
+        if not self.is_running:
+            # Update UI
             self.startButton.setEnabled(False)
             self.stopButton.setEnabled(True)
-            # Check possibility for multi threading
+
+            # Start process in a separate thread
+            self.thread = threading.Thread(target= lambda:self.process_thread(cradle, vessel, pockets, stirrer))
+            self.is_running = True
+            self.thread.start()
+
+    def stop_process(self):
+        if self.is_running:
+            # Stop the process
+            self.is_running = False
+
+            # Wait for the thread to finish
+            self.thread.join()
+
+            # Update UI
+            self.startButton.setEnabled(True)
+            self.stopButton.setEnabled(False)
+
+    def process_thread(self, cradle, vessel, pockets, stirrer):
+        # Your process code goes here
+        while self.is_running:
+            # Run your process
+            QApplication.processEvents()  # Allow GUI updates
+            while pockets[0].detect_rbr() or pockets[1].detect_rbr():
+                # Position calibration
+                if not self.positionCalibration:
+                    cradle.position_calibration()
+                    self.positionCalibration = True
+
+                for pocket in pockets:
+                    if pocket.detect_rbr():
+                        pocket_retrive_x, pocket_retrive_z = pocket.get_position_retrive()
+                        pocket_leave_x, pocket_leave_z = pocket.get_position_leave()
+                        break
+            
+                # Move to RBR position
+                cradle.move_to_x_coord(pocket_retrive_x, self.horizontal_delay)
+                cradle.move_to_z_coord(pocket_retrive_z, self.vertical_delay)
+                
+                # Move RBR to vessel
+                vessel_x, vessel_z = vessel.get_position()
+                cradle.move_to_z_coord(0, self.vertical_delay)
+                cradle.move_to_x_coord(vessel_x, self.horizontal_delay)
+                # Revision: add sensor check
+                cradle.move_to_z_coord(vessel_z, self.vertical_delay)
+                # Revision: add sensor check
+                
+                # Fill vessel with reagent
+                vessel.fill_reagent(self.vesselVolume)
+                
+                # Fill vessel with acid
+                vessel.fill_acid(self.acidVolume)
+                
+                # Start and stop stirrer
+                stirrer_command(stirrer, 500, "Start")
+                sleep(20)
+                stirrer_command(stirrer, 500, "Stop")
+                # Revision: Read from GUI
+                
+                # Empty the vessel
+                vessel.empty(self.emptyTime)
+                
+                # Dry RBR
+                stirrer_command(stirrer, 500, "Start")
+                vessel.empty(self.dryingTime)
+                stirrer_command(stirrer, 0, "Stop")
+                
+                # Leave RBR
+                cradle.move_to_z_coord(0, self.vertical_delay)
+                cradle.move_to_x_coord(pocket_leave_x, self.horizontal_delay)
+                cradle.move_to_z_coord(pocket_leave_z, self.vertical_delay)
+                cradle.move_to_z_coord(0, self.vertical_delay)
+                
+            
+            
+            
+                
+        # Cleanup or finalization code here
+        # ...
+
+# ------------------------------------------ #
+# --------------- Main --------------------- #
+# ------------------------------------------ #
+
+
+app = QApplication(sys.argv)
+GUI = Automation()
+widget = QtWidgets.QStackedWidget()
+widget.addWidget(GUI)
+widget.setFixedHeight(480)
+widget.setFixedWidth(800)
+widget.show()
+try:
+    sys.exit(app.exec_())
+except:
+    print("Exiting program")      
+        
+# Close the serial connection when done
+#stirrer.serial.close()
+# Clean up GPIO
+GPIO.cleanup()
+          

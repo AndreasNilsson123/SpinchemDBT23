@@ -25,8 +25,8 @@ script_directory = os.path.dirname(os.path.abspath(__file__))
 # ----------- Initialize objects ----------- #
 # ------------------------------------------ #
 
-def setup_vessel(PIN1, PIN2, coord_x, coord_y): # REVISION: 
-    vessel = Vessel(PIN1,PIN2, coord_x, coord_y)
+def setup_vessel(PIN_reagent, PIN_acid, PIN_emptying, PIN_pump, PIN_liquid,coord_x, coord_y): # REVISION: 
+    vessel = Vessel(PIN_reagent, PIN_acid, PIN_emptying, PIN_pump, PIN_liquid, coord_x, coord_y)
     return vessel
 
 def setup_sensors(PIN1,PIN2,PIN3,PIN4, coord_x1, coord_y1, coord_x2, coord_y2):
@@ -97,12 +97,14 @@ class Automation(QMainWindow):
         # Needs changing
         cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=22, V2_dir=23,
                                     H_step=24, H_dir=25, sensor_v1=26, sensor_v2=21,
-                                    sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=20)
-        vessel = setup_vessel(PIN1=18, PIN2=16,
+                                    sensor_h1=13, vessel_sensor_x=19, vessel_sensor_y=11)
+        vessel = setup_vessel(PIN_reagent=18, PIN_acid=16,
+                              PIN_emptying=12, PIN_pump=7, PIN_liquid=10,
                               coord_x=vessel_x, coord_y=vessel_y)
+
         
-        pocket2, pocket1 = setup_sensors(PIN1 = 8, PIN2 = 9,
-                                         PIN3 = 10, PIN4 = 11, 
+        pocket2, pocket1 = setup_sensors(PIN1=3, PIN2=2,
+                                         PIN3=9, PIN4=4, 
                                          coord_x1 = pocket1_x, coord_y1 = pocket1_y, 
                                          coord_x2 = pocket2_x, coord_y2 = pocket2_y)
         pockets = [pocket1, pocket2]
@@ -192,12 +194,6 @@ class Automation(QMainWindow):
                 cradle.move_to_z_coord(pocket_leave_z, self.vertical_delay)
                 cradle.move_to_z_coord(0, self.vertical_delay)
                 
-            
-            
-            
-                
-        # Cleanup or finalization code here
-        # ...
 
 # ------------------------------------------ #
 # --------------- Main --------------------- #

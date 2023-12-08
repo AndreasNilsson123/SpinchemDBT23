@@ -70,7 +70,7 @@ script_directory = os.path.dirname(os.path.abspath(__file__))
 class Automation(QMainWindow):
     def __init__(self):
         super(Automation, self).__init__()
-        loadUi(os.path.join(script_directory, "GUI_prototype.ui"), self)
+        loadUi(os.path.join(script_directory, "GUI_prototype_v2.ui"), self)
         # Define neccessary parameters
         self.positionCalibration = False
         

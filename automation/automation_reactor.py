@@ -89,7 +89,7 @@ class Automation(QMainWindow):
         pocket2_y = int(131*160)
         
         # Other variables
-        self.vesselVolume = 300
+        self.vesselVolume = 400
         self.acidVolume = 5
         self.emptyTime = 30
         self.dryingTime = 10
@@ -200,7 +200,7 @@ class Automation(QMainWindow):
                 # Revision: Read from GUI
                 
                 # Empty the vessel
-                vessel.empty(self.emptyTime)
+                vessel.empty_tank(self.emptyTime)
                 
                 # Dry RBR
                 stirrer_command(stirrer, 500, "Start")

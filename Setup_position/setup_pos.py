@@ -18,9 +18,9 @@ def setup_vessel(PIN_reagent, PIN_acid, PIN_emptying, PIN_pump, PIN_liquid,coord
     return vessel
 
 
-vessel_x = 5*280
+vessel_x = 5*290
 vessel_y = 0
-horizontal_delay = 0.005
+horizontal_delay = 0.002
 
 
 cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=24, V2_dir=25,

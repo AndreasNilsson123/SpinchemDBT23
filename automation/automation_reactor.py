@@ -89,9 +89,9 @@ class Automation(QMainWindow):
         pocket2_y = int(131*160)
         
         # Other variables
-        self.vesselVolume = 50
-        self.acidVolume = 50
-        self.emptyTime = 5
+        self.vesselVolume = 1
+        self.acidVolume = 150
+        self.emptyTime = 15
         self.dryingTime = 5
         self.is_running = False
         
@@ -164,11 +164,9 @@ class Automation(QMainWindow):
             QApplication.processEvents()  # Allow GUI updates
             while not pockets[0].detect_rbr() or pockets[1].detect_rbr(): #OBS: Change back from not
                 # Position calibration
-                print("Hello1")
                 if not self.positionCalibration:
                     cradle.position_calibration()
                     self.positionCalibration = True
-                # print("Hello2")
                 # for pocket in pockets:
                 #     if pocket.detect_rbr():
                 #         pocket_retrive_x, pocket_retrive_z = pocket.get_position_retrive()
@@ -188,30 +186,30 @@ class Automation(QMainWindow):
                 # Revision: add sensor check
                 
                 # Fill vessel with reagent
-                vessel.fill_reagent(self.vesselVolume)
+                #vessel.fill_reagent(self.vesselVolume)
                 
                 # Fill vessel with acid
                 vessel.fill_acid(self.acidVolume)
                 
                 # Start and stop stirrer
-                stirrer_command(stirrer, 500, "Start")
-                sleep(20)
-                stirrer_command(stirrer, 500, "Stop")
+                #stirrer_command(stirrer, 500, "Start")
+                #sleep(20)
+                #stirrer_command(stirrer, 500, "Stop")
                 # Revision: Read from GUI
                 
                 # Empty the vessel
                 vessel.empty_tank(self.emptyTime)
                 
                 # Dry RBR
-                stirrer_command(stirrer, 500, "Start")
-                vessel.empty_tank(self.dryingTime)
-                stirrer_command(stirrer, 0, "Stop")
+                #stirrer_command(stirrer, 500, "Start")
+                #vessel.empty_tank(self.dryingTime)
+                #stirrer_command(stirrer, 0, "Stop")
                 
                 # Leave RBR
-                cradle.move_to_z_coord(0, self.vertical_delay)
-                cradle.move_to_x_coord(pocket_leave_x, self.horizontal_delay)
-                cradle.move_to_z_coord(pocket_leave_z, self.vertical_delay)
-                cradle.move_to_z_coord(0, self.vertical_delay)
+                # cradle.move_to_z_coord(0, self.vertical_delay)
+                # cradle.move_to_x_coord(pocket_leave_x, self.horizontal_delay)
+                # cradle.move_to_z_coord(pocket_leave_z, self.vertical_delay)
+                # cradle.move_to_z_coord(0, self.vertical_delay)
                 
 
 # ------------------------------------------ #

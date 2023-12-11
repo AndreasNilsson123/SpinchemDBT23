@@ -108,8 +108,8 @@ class Automation(QMainWindow):
         
         
         # Needs changing
-        cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=22, V2_dir=23,
-                                    H_step=24, H_dir=25, sensor_v1=26, sensor_v2=21,
+        cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=24, V2_dir=25,
+                                    H_step=22, H_dir=23, sensor_v1=26, sensor_v2=21,
                                     sensor_h1=13, vessel_sensor_x=19, vessel_sensor_y=11)
         vessel = setup_vessel(PIN_reagent=18, PIN_acid=16,
                               PIN_emptying=12, PIN_pump=7, PIN_liquid=10,
@@ -164,10 +164,11 @@ class Automation(QMainWindow):
             QApplication.processEvents()  # Allow GUI updates
             while not pockets[0].detect_rbr() or pockets[1].detect_rbr():
                 # Position calibration
+                print("Hello1")
                 if not self.positionCalibration:
                     cradle.position_calibration()
                     self.positionCalibration = True
-
+                print("Hello2")
                 for pocket in pockets:
                     if pocket.detect_rbr():
                         pocket_retrive_x, pocket_retrive_z = pocket.get_position_retrive()

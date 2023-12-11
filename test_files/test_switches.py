@@ -5,7 +5,7 @@ from switchButton import SwitchButton
 
 # Declare pins
 LEFT_VERTICAL = 21
-RIGHT_VERTICAL = 26
+RIGHT_VERTICAL = 10
 
 button_left = SwitchButton(LEFT_VERTICAL)
 button_right = SwitchButton(RIGHT_VERTICAL)

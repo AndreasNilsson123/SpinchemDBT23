@@ -204,7 +204,7 @@ class Automation(QMainWindow):
                 
                 # Dry RBR
                 stirrer_command(stirrer, 500, "Start")
-                vessel.empty(self.dryingTime)
+                vessel.empty_tank(self.dryingTime)
                 stirrer_command(stirrer, 0, "Stop")
                 
                 # Leave RBR

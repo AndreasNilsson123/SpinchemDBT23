@@ -19,7 +19,7 @@ def setup_vessel(PIN_reagent, PIN_acid, PIN_emptying, PIN_pump, PIN_liquid,coord
 
 
 vessel_x = 5*295
-vessel_y = 120*100
+vessel_y = 128*100
 horizontal_delay = 0.002
 vertical_delay = 0.002
 
@@ -36,3 +36,4 @@ cradle.position_calibration()
 pos_x, pos_z = vessel.get_position()
 cradle.move_to_x_coord(pos_x, horizontal_delay)
 cradle.move_to_z_coord(pos_z, vertical_delay)
+cradle.move_to_z_coord(0, vertical_delay)

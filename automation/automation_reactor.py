@@ -168,23 +168,23 @@ class Automation(QMainWindow):
                 if not self.positionCalibration:
                     cradle.position_calibration()
                     self.positionCalibration = True
-                print("Hello2")
-                for pocket in pockets:
-                    if pocket.detect_rbr():
-                        pocket_retrive_x, pocket_retrive_z = pocket.get_position_retrive()
-                        pocket_leave_x, pocket_leave_z = pocket.get_position_leave()
-                        break
+                # print("Hello2")
+                # for pocket in pockets:
+                #     if pocket.detect_rbr():
+                #         pocket_retrive_x, pocket_retrive_z = pocket.get_position_retrive()
+                #         pocket_leave_x, pocket_leave_z = pocket.get_position_leave()
+                #         break
             
-                # Move to RBR position
-                cradle.move_to_x_coord(pocket_retrive_x, self.horizontal_delay)
-                cradle.move_to_z_coord(pocket_retrive_z, self.vertical_delay)
+                # # Move to RBR position
+                # cradle.move_to_x_coord(pocket_retrive_x, self.horizontal_delay)
+                # cradle.move_to_z_coord(pocket_retrive_z, self.vertical_delay)
                 
-                # Move RBR to vessel
-                vessel_x, vessel_z = vessel.get_position()
-                cradle.move_to_z_coord(0, self.vertical_delay)
-                cradle.move_to_x_coord(vessel_x, self.horizontal_delay)
-                # Revision: add sensor check
-                cradle.move_to_z_coord(vessel_z, self.vertical_delay)
+                # # Move RBR to vessel
+                # vessel_x, vessel_z = vessel.get_position()
+                # cradle.move_to_z_coord(0, self.vertical_delay)
+                # cradle.move_to_x_coord(vessel_x, self.horizontal_delay)
+                # # Revision: add sensor check
+                # cradle.move_to_z_coord(vessel_z, self.vertical_delay)
                 # Revision: add sensor check
                 
                 # Fill vessel with reagent

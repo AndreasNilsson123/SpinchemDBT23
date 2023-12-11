@@ -16,18 +16,19 @@ class Vessel:
         self.pump = Pump(pump_filling)
         self.liquid_detection = LiquidDetection(pin_liquid_detection)
         self.position = Position(coord_x, coord_y)
-        self.volume_to_time = 0.105
+        self.volume_to_time_reagent = 0.105
+        self.volume_to_time_acid = 1.47
         
     def fill_reagent(self, volume):
         if not self.liquid_detection.is_filled(): # Change back to not
-            filling_time = volume * self.volume_to_time
+            filling_time = volume * self.volume_to_time_reagent
             self.valve_reagent.open()
             sleep(filling_time)
             self.valve_reagent.close()
         
     
     def fill_acid(self, volume):
-        filling_time = volume * self.volume_to_time
+        filling_time = volume * self.volume_to_time_acid
         self.valve_acid.open()
         self.pump.start()
         sleep(filling_time)

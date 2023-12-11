@@ -81,16 +81,16 @@ class Automation(QMainWindow):
         self.current_pocket = 0
         
         # Position of objects
-        vessel_x = 268*5
-        vessel_y = 122*160
+        vessel_x = 5*295
+        vessel_y = 128*100
         pocket1_x = int(128.4*5)
         pocket1_y = int(131*160)
         pocket2_x = int(28.6*5)
         pocket2_y = int(131*160)
         
         # Other variables
-        self.vesselVolume = 1
-        self.acidVolume = 150
+        self.vesselVolume = 400
+        self.acidVolume = 50
         self.emptyTime = 15
         self.dryingTime = 5
         self.is_running = False
@@ -178,22 +178,22 @@ class Automation(QMainWindow):
                 # cradle.move_to_z_coord(pocket_retrive_z, self.vertical_delay)
                 
                 # # Move RBR to vessel
-                # vessel_x, vessel_z = vessel.get_position()
+                vessel_x, vessel_z = vessel.get_position()
                 # cradle.move_to_z_coord(0, self.vertical_delay)
-                # cradle.move_to_x_coord(vessel_x, self.horizontal_delay)
+                cradle.move_to_x_coord(vessel_x, self.horizontal_delay)
                 # # Revision: add sensor check
-                # cradle.move_to_z_coord(vessel_z, self.vertical_delay)
+                cradle.move_to_z_coord(vessel_z, self.vertical_delay)
                 # Revision: add sensor check
                 
                 # Fill vessel with reagent
-                #vessel.fill_reagent(self.vesselVolume)
+                vessel.fill_reagent(self.vesselVolume)
                 
                 # Fill vessel with acid
                 vessel.fill_acid(self.acidVolume)
                 
                 # Start and stop stirrer
                 #stirrer_command(stirrer, 500, "Start")
-                #sleep(20)
+                sleep(60)
                 #stirrer_command(stirrer, 500, "Stop")
                 # Revision: Read from GUI
                 

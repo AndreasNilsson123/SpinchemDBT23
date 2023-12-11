@@ -95,7 +95,7 @@ class Cradle:
         Returns:
             None
         """
-        self.horizontal_motor.set_direction("clockwise")
+        self.horizontal_motor.set_direction("counterclockwise")
         self.horizontal_motor.step(steps, delay)
         self.update_position(steps, 0)
     
@@ -110,7 +110,7 @@ class Cradle:
         Returns:
             None
         """
-        self.horizontal_motor.set_direction("counterclockwise")
+        self.horizontal_motor.set_direction("clockwise")
         self.horizontal_motor.step(steps, delay)
         self.update_position(-steps, 0)
     
@@ -158,7 +158,7 @@ class Cradle:
     def position_calibration(self):
         self.vertical_motor_1.set_direction("counterclockwise")
         self.vertical_motor_2.set_direction("counterclockwise")
-        self.horizontal_motor.set_direction("counterclockwise")
+        self.horizontal_motor.set_direction("clockwise")
         self.position.set_position(0, 0)
         # Run vertical motors to top position
         while True:

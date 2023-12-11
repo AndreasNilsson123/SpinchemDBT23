@@ -19,7 +19,7 @@ def setup_vessel(PIN_reagent, PIN_acid, PIN_emptying, PIN_pump, PIN_liquid,coord
 
 
 vessel_x = 5*295
-vessel_y = 80*100
+vessel_y = 120*100
 horizontal_delay = 0.002
 vertical_delay = 0.002
 

@@ -76,13 +76,13 @@ class Automation(QMainWindow):
         loadUi(os.path.join(script_directory, "GUI_automation.ui"), self)
         # Define neccessary parameters
         self.positionCalibration = False
-        self.vertical_delay = 0.002
+        self.vertical_delay = 0.0013
         self.horizontal_delay = 0.002
         self.current_pocket = 0
         
         # Position of objects
         vessel_x = 5*295
-        vessel_y = 128*100
+        vessel_y = 125*100
         pocket1_x = int(128.4*5)
         pocket1_y = int(131*160)
         pocket2_x = int(28.6*5)

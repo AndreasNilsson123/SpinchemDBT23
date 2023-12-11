@@ -4,7 +4,7 @@ class Pump:
     def __init__(self, pin):
         self.pin = pin
         GPIO.setup(self.pin, GPIO.OUT)
-        self.close()
+        self.stop()
     
     def start(self):
         GPIO.output(self.pin, GPIO.HIGH)

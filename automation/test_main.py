@@ -70,7 +70,7 @@ script_directory = os.path.dirname(os.path.abspath(__file__))
 class Automation(QMainWindow):
     def __init__(self):
         super(Automation, self).__init__()
-        loadUi(os.path.join(script_directory, "GUI_prototype_v2.ui"), self)
+        loadUi(os.path.join(script_directory, "GUI_automation.ui"), self)
         # Define neccessary parameters
         self.positionCalibration = False
         
@@ -80,45 +80,64 @@ class Automation(QMainWindow):
         #                             H_step=24, H_dir=25, sensor_v1=26, sensor_v2=21,
         #                             sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=20)
         # vessel = setup_vessel(PIN1=18, PIN2=16, coord_x=0, coord_y=0)
+                # Initiate sliders
+        self.dispStirrerSpeed.setText(str(self.stirrerSpeed.minimum()))
+        self.dispStirrerSpeed_3.setText(str(self.stirrerSpeed_3.minimum()))
+        self.dispOperationalTime.setText(str(self.operationalTime.minimum()))
+        self.dispOperationalTime_3.setText(str(self.operationalTime_3.minimum()))
         
+        #self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
+        self.stirrerSpeed.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispStirrerSpeed, self.stirrerSpeed.value()))
+        self.stirrerSpeed_3.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispStirrerSpeed_3, self.stirrerSpeed_3.value()))
+        self.operationalTime.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime, self.operationalTime.value()))
+        self.operationalTime_3.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime_3, self.operationalTime_3.value()))
+        
+        #self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
+        #self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
         # stirrer = setup_stirrer('/dev/serial0', 9600)
         cradle = False
         vessel = False
         stirrer = False
         # Step 1
-        self.pickUp.clicked.connect(lambda: self.pickUpNewRBR(cradle))
-        # Step 2
-        self.rbrToVessel.clicked.connect(lambda: self.moveRBRToVessel(cradle, vessel))
-        # Step 3
-        self.fillVessel.clicked.connect(lambda: self.fillTheVessel(vessel))
-        # Step 4
-        self.startMotor.clicked.connect(lambda: self.startStirrerMotor(stirrer))
-        # Step 5
-        self.stopMotor.clicked.connect(lambda: self.stopStirrerMotor(stirrer))
-        # Step 6
-        self.emptyVessel.clicked.connect(lambda: self.emptyTheVessel(vessel))
-        # Step 7
-        self.liftRbr.clicked.connect(lambda: self.liftRBRFromVessel(cradle))
-        # Step 8
-        self.leaveRbr.clicked.connect(lambda: self.leaveRBRInPocket(cradle))
+        # self.pickUp.clicked.connect(lambda: self.pickUpNewRBR(cradle))
+        # # Step 2
+        # self.rbrToVessel.clicked.connect(lambda: self.moveRBRToVessel(cradle, vessel))
+        # # Step 3
+        # self.fillVessel.clicked.connect(lambda: self.fillTheVessel(vessel))
+        # # Step 4
+        # self.startMotor.clicked.connect(lambda: self.startStirrerMotor(stirrer))
+        # # Step 5
+        # self.stopMotor.clicked.connect(lambda: self.stopStirrerMotor(stirrer))
+        # # Step 6
+        # self.emptyVessel.clicked.connect(lambda: self.emptyTheVessel(vessel))
+        # # Step 7
+        # self.liftRbr.clicked.connect(lambda: self.liftRBRFromVessel(cradle))
+        # # Step 8
+        # self.leaveRbr.clicked.connect(lambda: self.leaveRBRInPocket(cradle))
         
-        # Set the initial value of the QLineEdit to the lowest value of the slider
-        initial_value = self.stirrerSpeed.minimum()
-        self.dispStirrerSpeed.setText(str(initial_value))
+        # # Set the initial value of the QLineEdit to the lowest value of the slider
+        # initial_value = self.stirrerSpeed.minimum()
+        # self.dispStirrerSpeed.setText(str(initial_value))
         
-        # Connect the slider valueChanged signal to the text box setText slot
-        self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
+        # # Connect the slider valueChanged signal to the text box setText slot
+        # self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
         
-        # Initial state
-        self.set_initial_button_color(self.pickUp, QColor(Qt.green))
-        self.set_initial_button_color(self.leaveRbr, QColor(Qt.red))
-        self.set_initial_button_color(self.rbrToVessel, QColor(Qt.red))
-        self.set_initial_button_color(self.fillVessel, QColor(Qt.red))
-        self.set_initial_button_color(self.startMotor, QColor(Qt.red))
-        self.set_initial_button_color(self.stopMotor, QColor(Qt.red))
-        self.set_initial_button_color(self.emptyVessel, QColor(Qt.red))
-        self.set_initial_button_color(self.liftRbr, QColor(Qt.red))
-    
+        # # Initial state
+        # self.set_initial_button_color(self.pickUp, QColor(Qt.green))
+        # self.set_initial_button_color(self.leaveRbr, QColor(Qt.red))
+        # self.set_initial_button_color(self.rbrToVessel, QColor(Qt.red))
+        # self.set_initial_button_color(self.fillVessel, QColor(Qt.red))
+        # self.set_initial_button_color(self.startMotor, QColor(Qt.red))
+        # self.set_initial_button_color(self.stopMotor, QColor(Qt.red))
+        # self.set_initial_button_color(self.emptyVessel, QColor(Qt.red))
+        # self.set_initial_button_color(self.liftRbr, QColor(Qt.red))
+
+    def on_slider_value_changed(self, var, value):
+        # Convert the integer value to a string and set it in the text box
+        #self.dispStirrerSpeed.setText(str(value))
+        var.setText(str(value)) 
+        #self.dispStirrerSpeed.setText(str(value)) 
+        #self.dispStirrerSpeed.setText(str(value))
     def toggle_button_color(self, button):
         # Toggle between green and red
         if button.styleSheet() == "background-color: #00ff00;":
@@ -137,10 +156,6 @@ class Automation(QMainWindow):
         button.repaint()
 
 
-    def on_slider_value_changed(self, value):
-        # Convert the integer value to a string and set it in the text box
-        self.dispStirrerSpeed.setText(str(value))        
-    
     # 1. Button for RBR pick-up
     def pickUpNewRBR(self, cradle):
         self.toggle_button_color(self.rbrToVessel)

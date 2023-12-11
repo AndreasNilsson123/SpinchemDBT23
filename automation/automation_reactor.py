@@ -94,6 +94,18 @@ class Automation(QMainWindow):
         self.emptyTime = 30
         self.dryingTime = 10
         
+        
+        # Initiate sliders
+        self.dispStirrerSpeed.setText(str(self.stirrerSpeed.minimum()))
+        self.dispStirrerSpeed_3.setText(str(self.stirrerSpeed_3.minimum()))
+        self.dispOperationalTime.setText(str(self.operationalTime.minimum()))
+        self.dispOperationalTime_3.setText(str(self.operationalTime_3.minimum()))
+        self.stirrerSpeed.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispStirrerSpeed, self.stirrerSpeed.value()))
+        self.stirrerSpeed_3.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispStirrerSpeed_3, self.stirrerSpeed_3.value()))
+        self.operationalTime.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime, self.operationalTime.value()))
+        self.operationalTime_3.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime_3, self.operationalTime_3.value()))
+        
+        
         # Needs changing
         cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=22, V2_dir=23,
                                     H_step=24, H_dir=25, sensor_v1=26, sensor_v2=21,
@@ -115,6 +127,11 @@ class Automation(QMainWindow):
         self.stopButton.setEnabled(False)
         self.startButton.clicked.connect(lambda: self.start_process(cradle, vessel, pockets, stirrer))
         self.stopButton.clicked.connect(self.stop_process)
+    
+    def on_slider_value_changed(self, var, value):
+        # Convert the integer value to a string and set it in the text box
+        #self.dispStirrerSpeed.setText(str(value))
+        var.setText(str(value))    
 
     def start_process(self,cradle, vessel, pockets, stirrer):
         if not self.is_running:

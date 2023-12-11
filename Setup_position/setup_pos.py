@@ -1,8 +1,8 @@
 from cradle import Cradle
 from vessel import Vessel
+import RPi.GPIO as GPIO
 
-
-
+GPIO.setmode(GPIO.BCM)
 def setup_cradle(V1_step, V1_dir,
                  V2_step, V2_dir,
                  H_step, H_dir,

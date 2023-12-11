@@ -93,6 +93,7 @@ class Automation(QMainWindow):
         self.acidVolume = 5
         self.emptyTime = 30
         self.dryingTime = 10
+        self.is_running = False
         
         
         # Initiate sliders

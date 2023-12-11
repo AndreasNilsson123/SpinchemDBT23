@@ -13,7 +13,6 @@ class rbrPocketDetection():
         self.position_leave = Position(coord_x, coord_y+factor)
         
     def detect_rbr(self):
-        print(self.sensor1.object_detected(), self.sensor2.object_detected())
         if self.sensor1.object_detected() and not self.sensor2.object_detected():
             return True
         else:

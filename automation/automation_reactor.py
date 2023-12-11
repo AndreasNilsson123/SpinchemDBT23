@@ -89,10 +89,10 @@ class Automation(QMainWindow):
         pocket2_y = int(131*160)
         
         # Other variables
-        self.vesselVolume = 400
-        self.acidVolume = 5
-        self.emptyTime = 30
-        self.dryingTime = 10
+        self.vesselVolume = 50
+        self.acidVolume = 50
+        self.emptyTime = 5
+        self.dryingTime = 5
         self.is_running = False
         
         

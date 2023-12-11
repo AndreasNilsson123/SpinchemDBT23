@@ -162,7 +162,7 @@ class Automation(QMainWindow):
         while self.is_running:
             # Run your process
             QApplication.processEvents()  # Allow GUI updates
-            while not pockets[0].detect_rbr() or pockets[1].detect_rbr():
+            while not pockets[0].detect_rbr() or pockets[1].detect_rbr(): #OBS: Change back from not
                 # Position calibration
                 print("Hello1")
                 if not self.positionCalibration:

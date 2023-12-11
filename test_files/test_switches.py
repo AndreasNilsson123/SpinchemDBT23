@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 from time import sleep
 from switchButton import SwitchButton
 
+GPIO.setmode(GPIO.BCM)
 
 # Declare pins
 LEFT_VERTICAL = 21

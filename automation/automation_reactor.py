@@ -193,7 +193,7 @@ class Automation(QMainWindow):
                 # Move to RBR position
                 cradle.move_to_x_coord(pocket_retrive_x, self.horizontal_delay)
                 cradle.move_to_z_coord(pocket_retrive_z, self.vertical_delay)
-                
+                cradle.move_to_z_coord(0, self.vertical_delay)
                 # Move RBR to vessel
                 vessel_x, vessel_z = vessel.get_position()
                 # cradle.move_to_z_coord(0, self.vertical_delay)

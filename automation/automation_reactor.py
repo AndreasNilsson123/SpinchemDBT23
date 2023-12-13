@@ -84,9 +84,9 @@ class Automation(QMainWindow):
         vessel_x = 5*295
         vessel_y = 125*100
         pocket1_x = int(3*5)
-        pocket1_y = int(135*100)
+        pocket1_y = int(133*100)
         pocket2_x = int(111*5)
-        pocket2_y = int(135*100)
+        pocket2_y = int(133*100)
         
         # Other variables
         self.vesselVolume = 400
@@ -119,7 +119,7 @@ class Automation(QMainWindow):
                               coord_x=vessel_x, coord_y=vessel_y)
 
         
-        pocket2, pocket1 = setup_sensors(PIN1=3, PIN2=2,
+        pocket1, pocket2 = setup_sensors(PIN1=3, PIN2=2,
                                          PIN3=9, PIN4=4, 
                                          coord_x1 = pocket1_x, coord_y1 = pocket1_y, 
                                          coord_x2 = pocket2_x, coord_y2 = pocket2_y)
@@ -158,6 +158,17 @@ class Automation(QMainWindow):
             # Update UI
             self.startButton.setEnabled(True)
             self.stopButton.setEnabled(False)
+            self.positionCalibration = False
+    
+    def move_to_pocket(self, cradle, pos_x, pos_z):
+        cradle.move_to_x_coord(pos_x, self.horizontal_delay)
+        cradle.move_to_z_coord(pos_z, self.vertical_delay)
+        cradle.move_to_z_coord(0, self.vertical_delay)
+    
+    def move_to_vessel(self, cradle, pos_x, pos_z):
+        cradle.move_to_x_coord(pos_x, self.horizontal_delay)
+        # Revision: add sensor check
+        cradle.move_to_z_coord(pos_z, self.vertical_delay)
 
     def process_thread(self, cradle, vessel, pockets, stirrer):
         # Your process code goes here
@@ -167,19 +178,12 @@ class Automation(QMainWindow):
         while self.is_running:
             # Run your process
             QApplication.processEvents()  # Allow GUI updates
-            for pocket in pockets: #OBS: Change back from not
+            for pocket in pockets:
                 # Position calibration
                 if not self.positionCalibration:
                     cradle.position_calibration()
                     self.positionCalibration = True
-                
-                # for pocket in pockets:
-                #     if pocket.detect_rbr():
-                #         pocket_retrive_x, pocket_retrive_z = pocket.get_position_retrive()
-                #         pocket_leave_x, pocket_leave_z = pocket.get_position_leave()
-                #         cycle_number = pocket.get_cycle_number()
-                #         break
-                
+
                 pocket_retrive_x, pocket_retrive_z = pocket.get_position_retrive()
                 pocket_leave_x, pocket_leave_z = pocket.get_position_leave()
                 cycle_number = pocket.get_cycle_number()
@@ -192,15 +196,12 @@ class Automation(QMainWindow):
                 if not self.is_running: break
             
                 # Move to RBR position
-                cradle.move_to_x_coord(pocket_retrive_x, self.horizontal_delay)
-                cradle.move_to_z_coord(pocket_retrive_z, self.vertical_delay)
-                cradle.move_to_z_coord(0, self.vertical_delay)
+                self.move_to_pocket(cradle, pocket_retrive_x, pocket_retrive_z) 
+                
                 # Move RBR to vessel
                 vessel_x, vessel_z = vessel.get_position()
                 # cradle.move_to_z_coord(0, self.vertical_delay)
-                cradle.move_to_x_coord(vessel_x, self.horizontal_delay)
-                # Revision: add sensor check
-                cradle.move_to_z_coord(vessel_z, self.vertical_delay)
+                self.move_to_vessel(cradle, vessel_x, vessel_z)
                 # Revision: add sensor check
                 
                 # Fill vessel with reagent
@@ -229,8 +230,7 @@ class Automation(QMainWindow):
                 sleep(1)
                 # Leave RBR
                 cradle.move_to_z_coord(0, self.vertical_delay)
-                cradle.move_to_x_coord(pocket_leave_x, self.horizontal_delay)
-                cradle.move_to_z_coord(pocket_leave_z, self.vertical_delay)
+                self.move_to_pocket(cradle, pocket_leave_x, pocket_leave_z)
                 cradle.move_to_z_coord(0, self.vertical_delay)
             self.is_running = False
                 

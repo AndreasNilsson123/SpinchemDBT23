@@ -131,4 +131,11 @@ try:
 except:
     print("Exiting program")      
         
-          
+
+                
+# for pocket in pockets:
+#     if pocket.detect_rbr():
+#         pocket_retrive_x, pocket_retrive_z = pocket.get_position_retrive()
+#         pocket_leave_x, pocket_leave_z = pocket.get_position_leave()
+#         cycle_number = pocket.get_cycle_number()
+#         break

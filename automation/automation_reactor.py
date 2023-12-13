@@ -108,9 +108,7 @@ class Automation(QMainWindow):
         self.operationalTime.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime, self.operationalTime.value()))
         self.operationalTime_3.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime_3, self.operationalTime_3.value()))
         
-        # Create list of slider values
-        self.slider_speed_values = [self.stirrerSpeed.value(), self.stirrerSpeed_3.value()]
-        self.operational_time_values = [self.operationalTime.value(), self.operationalTime_3.value()]
+
         
         # Needs changing
         cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=24, V2_dir=25,
@@ -163,6 +161,9 @@ class Automation(QMainWindow):
 
     def process_thread(self, cradle, vessel, pockets, stirrer):
         # Your process code goes here
+        # Create list of slider values
+        self.slider_speed_values = [self.stirrerSpeed.value(), self.stirrerSpeed_3.value()]
+        self.operational_time_values = [self.operationalTime.value(), self.operationalTime_3.value()]
         while self.is_running:
             # Run your process
             QApplication.processEvents()  # Allow GUI updates
@@ -225,7 +226,7 @@ class Automation(QMainWindow):
                 stirrer_command(stirrer, 500, "Start")
                 vessel.empty_tank(self.dryingTime)
                 stirrer_command(stirrer, 0, "Stop")
-                
+                sleep(1)
                 # Leave RBR
                 cradle.move_to_z_coord(0, self.vertical_delay)
                 cradle.move_to_x_coord(pocket_leave_x, self.horizontal_delay)

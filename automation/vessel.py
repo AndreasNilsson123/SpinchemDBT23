@@ -20,7 +20,7 @@ class Vessel:
         self.volume_to_time_acid = 1.47
         
     def fill_reagent(self, volume):
-        if not self.liquid_detection.is_filled(): # Change back to not
+        if not self.liquid_detection.is_filled():
             filling_time = volume * self.volume_to_time_reagent
             self.valve_reagent.open()
             sleep(filling_time)

@@ -30,8 +30,8 @@ def setup_vessel(PIN_reagent, PIN_acid, PIN_emptying, PIN_pump, PIN_liquid,coord
     return vessel
 
 def setup_sensors(PIN1,PIN2,PIN3,PIN4, coord_x1, coord_y1, coord_x2, coord_y2):
-    pocket1_detection = rbrPocketDetection(PIN1, PIN2, coord_x=coord_x1, coord_y=coord_y1)
-    pocket2_detection = rbrPocketDetection(PIN3, PIN4, coord_x=coord_x2, coord_y=coord_y2)
+    pocket1_detection = rbrPocketDetection(PIN1, PIN2, coord_x=coord_x1, coord_y=coord_y1, cycle_number=0)
+    pocket2_detection = rbrPocketDetection(PIN3, PIN4, coord_x=coord_x2, coord_y=coord_y2, cycle_number=1)
     return pocket1_detection, pocket2_detection
 
 def setup_cradle(V1_step, V1_dir,
@@ -83,16 +83,16 @@ class Automation(QMainWindow):
         # Position of objects
         vessel_x = 5*295
         vessel_y = 125*100
-        pocket1_x = int(128.4*5)
-        pocket1_y = int(131*160)
-        pocket2_x = int(28.6*5)
-        pocket2_y = int(131*160)
+        pocket1_x = int(3*5)
+        pocket1_y = int(135*100)
+        pocket2_x = int(111*5)
+        pocket2_y = int(135*160)
         
         # Other variables
         self.vesselVolume = 400
         self.acidVolume = 50
         self.emptyTime = 15
-        self.dryingTime = 5
+        self.dryingTime = 10
         self.is_running = False
         
         
@@ -101,11 +101,16 @@ class Automation(QMainWindow):
         self.dispStirrerSpeed_3.setText(str(self.stirrerSpeed_3.minimum()))
         self.dispOperationalTime.setText(str(self.operationalTime.minimum()))
         self.dispOperationalTime_3.setText(str(self.operationalTime_3.minimum()))
+        
+        # Change recorded movement of sliders
         self.stirrerSpeed.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispStirrerSpeed, self.stirrerSpeed.value()))
         self.stirrerSpeed_3.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispStirrerSpeed_3, self.stirrerSpeed_3.value()))
         self.operationalTime.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime, self.operationalTime.value()))
         self.operationalTime_3.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime_3, self.operationalTime_3.value()))
         
+        # Create list of slider values
+        self.slider_speed_values = [self.stirrerSpeed.value(), self.stirrerSpeed_3.value()]
+        self.operational_time_values = [self.operationalTime.value(), self.operationalTime_3.value()]
         
         # Needs changing
         cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=24, V2_dir=25,
@@ -131,7 +136,6 @@ class Automation(QMainWindow):
     
     def on_slider_value_changed(self, var, value):
         # Convert the integer value to a string and set it in the text box
-        #self.dispStirrerSpeed.setText(str(value))
         var.setText(str(value))    
 
     def start_process(self,cradle, vessel, pockets, stirrer):
@@ -141,7 +145,7 @@ class Automation(QMainWindow):
             self.stopButton.setEnabled(True)
 
             # Start process in a separate thread
-            self.thread = threading.Thread(target= lambda:self.process_thread(cradle, vessel, pockets, stirrer))
+            self.thread = threading.Thread(target = lambda:self.process_thread(cradle, vessel, pockets, stirrer))
             self.is_running = True
             self.thread.start()
 
@@ -162,54 +166,72 @@ class Automation(QMainWindow):
         while self.is_running:
             # Run your process
             QApplication.processEvents()  # Allow GUI updates
-            while not pockets[0].detect_rbr() or pockets[1].detect_rbr(): #OBS: Change back from not
+            for pocket in pockets: #OBS: Change back from not
                 # Position calibration
                 if not self.positionCalibration:
                     cradle.position_calibration()
                     self.positionCalibration = True
+                
                 # for pocket in pockets:
                 #     if pocket.detect_rbr():
                 #         pocket_retrive_x, pocket_retrive_z = pocket.get_position_retrive()
                 #         pocket_leave_x, pocket_leave_z = pocket.get_position_leave()
+                #         cycle_number = pocket.get_cycle_number()
                 #         break
-            
-                # # Move to RBR position
-                # cradle.move_to_x_coord(pocket_retrive_x, self.horizontal_delay)
-                # cradle.move_to_z_coord(pocket_retrive_z, self.vertical_delay)
                 
-                # # Move RBR to vessel
+                pocket_retrive_x, pocket_retrive_z = pocket.get_position_retrive()
+                pocket_leave_x, pocket_leave_z = pocket.get_position_leave()
+                cycle_number = pocket.get_cycle_number()
+                
+                # Retrive arguments for cycle
+                stirrer_speed = self.slider_speed_values.get[cycle_number]
+                operational_time = self.operational_time_values.get[cycle_number]
+                
+                # Check stop button
+                if not self.is_running: break
+            
+                # Move to RBR position
+                cradle.move_to_x_coord(pocket_retrive_x, self.horizontal_delay)
+                cradle.move_to_z_coord(pocket_retrive_z, self.vertical_delay)
+                
+                # Move RBR to vessel
                 vessel_x, vessel_z = vessel.get_position()
                 # cradle.move_to_z_coord(0, self.vertical_delay)
                 cradle.move_to_x_coord(vessel_x, self.horizontal_delay)
-                # # Revision: add sensor check
+                # Revision: add sensor check
                 cradle.move_to_z_coord(vessel_z, self.vertical_delay)
                 # Revision: add sensor check
                 
                 # Fill vessel with reagent
                 vessel.fill_reagent(self.vesselVolume)
                 
+                # Run for some time
+                stirrer_command(stirrer, stirrer_speed, "Start")
+                sleep(operational_time)
+                stirrer_command(stirrer, 0, "Stop")
+                
                 # Fill vessel with acid
                 vessel.fill_acid(self.acidVolume)
-                
+            
                 # Start and stop stirrer
-                #stirrer_command(stirrer, 500, "Start")
-                sleep(60)
-                #stirrer_command(stirrer, 500, "Stop")
-                # Revision: Read from GUI
+                stirrer_command(stirrer, stirrer_speed, "Start")
+                sleep(operational_time)
+                stirrer_command(stirrer, 0, "Stop")
                 
                 # Empty the vessel
                 vessel.empty_tank(self.emptyTime)
                 
                 # Dry RBR
-                #stirrer_command(stirrer, 500, "Start")
-                #vessel.empty_tank(self.dryingTime)
-                #stirrer_command(stirrer, 0, "Stop")
+                stirrer_command(stirrer, 500, "Start")
+                vessel.empty_tank(self.dryingTime)
+                stirrer_command(stirrer, 0, "Stop")
                 
                 # Leave RBR
-                # cradle.move_to_z_coord(0, self.vertical_delay)
-                # cradle.move_to_x_coord(pocket_leave_x, self.horizontal_delay)
-                # cradle.move_to_z_coord(pocket_leave_z, self.vertical_delay)
-                # cradle.move_to_z_coord(0, self.vertical_delay)
+                cradle.move_to_z_coord(0, self.vertical_delay)
+                cradle.move_to_x_coord(pocket_leave_x, self.horizontal_delay)
+                cradle.move_to_z_coord(pocket_leave_z, self.vertical_delay)
+                cradle.move_to_z_coord(0, self.vertical_delay)
+            self.is_running = False
                 
 
 # ------------------------------------------ #

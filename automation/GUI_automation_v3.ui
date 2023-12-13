@@ -380,8 +380,28 @@ p, li { white-space: pre-wrap; }
      <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuAutomation">
+    <property name="title">
+     <string>Automation</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menuController">
+    <property name="title">
+     <string>Controller</string>
+    </property>
+    <addaction name="actionHej_p_dig"/>
+   </widget>
+   <addaction name="menuAutomation"/>
+   <addaction name="menuController"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionHej_p_dig">
+   <property name="text">
+    <string>Hej på dig</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>

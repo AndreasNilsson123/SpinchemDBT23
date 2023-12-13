@@ -1,3 +1,5 @@
+#import RPi.GPIO as GPIO
+import threading
 from time import sleep
 import sys
 import os
@@ -8,223 +10,111 @@ from PyQt5.uic import loadUi
 from PyQt5.QtGui import QColor
 from PyQt5.QtCore import Qt
 
-#GPIO.setmode(GPIO.BCM)
 # ------------------------------------------ #
 # ---------------- Setup GUI --------------- #
 # ------------------------------------------ #
 # Get the directory path where the script is located
 script_directory = os.path.dirname(os.path.abspath(__file__))
 
-# ------------------------------------------ #
-# ----------- Initialize objects ----------- #
-# ------------------------------------------ #
-
-# def setup_vessel(PIN1, PIN2, coord_x, coord_y):
-#     vessel = Vessel(PIN1,PIN2, coord_x, coord_y)
-#     return vessel
-
-# def setup_sensors(PIN1,PIN2,PIN3,PIN4):
-#     pocket1_detection = rbrPocketDetection(PIN1, PIN2)
-#     pocket2_detection = rbrPocketDetection(PIN3, PIN4)
-#     return pocket1_detection, pocket2_detection
-
-# def setup_cradle(V1_step, V1_dir,
-#                  V2_step, V2_dir,
-#                  H_step, H_dir,
-#                  sensor_v1, sensor_v2, 
-#                  sensor_h1,
-#                  vessel_sensor_y, vessel_sensor_x):
-#     cradle = Cradle(V1_step, V1_dir, V2_step, V2_dir, H_step, H_dir,
-#                     sensor_v1, sensor_v2, sensor_h1,vessel_sensor_y, vessel_sensor_x)
-#     return cradle
-
-# def setup_stirrer(SERIAL_PORT, BAUDRATE):
-#     stirrer = StirrerMotor(SERIAL_PORT, BAUDRATE)
-#     return stirrer
-# # # ------------------------------------------ #
-# # # ------------- Help Methods --------------- #
-# # # ------------------------------------------ #
-# def stirrer_command(stirrer: StirrerMotor, speed: int, command: str) -> None:
-#     """
-#     A function that sends a command to a stirrer motor.
-    
-#     Parameters:
-#         stirrer: A StirrerMotor object representing the stirrer motor.
-#         time: An integer representing the time (in seconds) to execute the command.
-#         speed: An integer representing the speed of the stirrer motor.
-#         command: A string representing the command to be sent to the stirrer motor.
-#                 ("Start" or "Stop")
-#     Returns:
-#         None
-#     """
-#     if command == "Start":
-#         command = "1,WSE," + str(speed) + "\r\n"
-#     elif command == "Stop":
-#         command = "1,WSE,0\r\n" 
-
-
-            
-# ------------------------------------------ #
-# --------------- Automation --------------- #
-# ------------------------------------------ #
 class Automation(QMainWindow):
     def __init__(self):
         super(Automation, self).__init__()
         loadUi(os.path.join(script_directory, "GUI_automation.ui"), self)
         # Define neccessary parameters
         self.positionCalibration = False
+        self.vertical_delay = 0.0013
+        self.horizontal_delay = 0.002
+        self.current_pocket = 0
+        
+        # Position of objects
+        vessel_x = 5*295
+        vessel_y = 125*100
+        pocket1_x = int(128.4*5)
+        pocket1_y = int(131*160)
+        pocket2_x = int(28.6*5)
+        pocket2_y = int(131*160)
+        
+        # Other variables
+        self.vesselVolume = 400
+        self.acidVolume = 50
+        self.emptyTime = 15
+        self.dryingTime = 5
+        self.is_running = False
         
         
-        # # Setup pins
-        # cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=22, V2_dir=23,
-        #                             H_step=24, H_dir=25, sensor_v1=26, sensor_v2=21,
-        #                             sensor_h1=13, vessel_sensor_y=19, vessel_sensor_x=20)
-        # vessel = setup_vessel(PIN1=18, PIN2=16, coord_x=0, coord_y=0)
-                # Initiate sliders
+        # Initiate sliders
         self.dispStirrerSpeed.setText(str(self.stirrerSpeed.minimum()))
         self.dispStirrerSpeed_3.setText(str(self.stirrerSpeed_3.minimum()))
         self.dispOperationalTime.setText(str(self.operationalTime.minimum()))
         self.dispOperationalTime_3.setText(str(self.operationalTime_3.minimum()))
         
-        #self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
+        # Change recorded movement of sliders
         self.stirrerSpeed.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispStirrerSpeed, self.stirrerSpeed.value()))
         self.stirrerSpeed_3.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispStirrerSpeed_3, self.stirrerSpeed_3.value()))
         self.operationalTime.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime, self.operationalTime.value()))
         self.operationalTime_3.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime_3, self.operationalTime_3.value()))
         
-        #self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
-        #self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
-        # stirrer = setup_stirrer('/dev/serial0', 9600)
-        cradle = False
-        vessel = False
-        stirrer = False
-        # Step 1
-        # self.pickUp.clicked.connect(lambda: self.pickUpNewRBR(cradle))
-        # # Step 2
-        # self.rbrToVessel.clicked.connect(lambda: self.moveRBRToVessel(cradle, vessel))
-        # # Step 3
-        # self.fillVessel.clicked.connect(lambda: self.fillTheVessel(vessel))
-        # # Step 4
-        # self.startMotor.clicked.connect(lambda: self.startStirrerMotor(stirrer))
-        # # Step 5
-        # self.stopMotor.clicked.connect(lambda: self.stopStirrerMotor(stirrer))
-        # # Step 6
-        # self.emptyVessel.clicked.connect(lambda: self.emptyTheVessel(vessel))
-        # # Step 7
-        # self.liftRbr.clicked.connect(lambda: self.liftRBRFromVessel(cradle))
-        # # Step 8
-        # self.leaveRbr.clicked.connect(lambda: self.leaveRBRInPocket(cradle))
+        # Create list of slider values
+        self.slider_speed_values = [self.stirrerSpeed.value(), self.stirrerSpeed_3.value()]
+        self.operational_time_values = [self.operationalTime.value(), self.operationalTime_3.value()]
         
-        # # Set the initial value of the QLineEdit to the lowest value of the slider
-        # initial_value = self.stirrerSpeed.minimum()
-        # self.dispStirrerSpeed.setText(str(initial_value))
+        cradle = False; vessel = False; pockets = False; stirrer = False
         
-        # # Connect the slider valueChanged signal to the text box setText slot
-        # self.stirrerSpeed.valueChanged.connect(self.on_slider_value_changed)
-        
-        # # Initial state
-        # self.set_initial_button_color(self.pickUp, QColor(Qt.green))
-        # self.set_initial_button_color(self.leaveRbr, QColor(Qt.red))
-        # self.set_initial_button_color(self.rbrToVessel, QColor(Qt.red))
-        # self.set_initial_button_color(self.fillVessel, QColor(Qt.red))
-        # self.set_initial_button_color(self.startMotor, QColor(Qt.red))
-        # self.set_initial_button_color(self.stopMotor, QColor(Qt.red))
-        # self.set_initial_button_color(self.emptyVessel, QColor(Qt.red))
-        # self.set_initial_button_color(self.liftRbr, QColor(Qt.red))
-
+        # Start process
+        self.stopButton.setEnabled(False)
+        self.startButton.clicked.connect(lambda: self.start_process(cradle, vessel, pockets, stirrer))
+        self.stopButton.clicked.connect(self.stop_process)
+    
     def on_slider_value_changed(self, var, value):
         # Convert the integer value to a string and set it in the text box
-        #self.dispStirrerSpeed.setText(str(value))
-        var.setText(str(value)) 
-        #self.dispStirrerSpeed.setText(str(value)) 
-        #self.dispStirrerSpeed.setText(str(value))
-    def toggle_button_color(self, button):
-        # Toggle between green and red
-        if button.styleSheet() == "background-color: #00ff00;":
-            self.set_initial_button_color(button, QColor(Qt.red))
-        else:
-            self.set_initial_button_color(button, QColor(Qt.green))
+        var.setText(str(value))    
 
-    def set_initial_button_color(self, button, color):
-        # Set the background color of the button
-        button.setStyleSheet(f"background-color: {color.name()};")
+    def start_process(self,cradle, vessel, pockets, stirrer):
+        if not self.is_running:
+            # Update UI
+            self.startButton.setEnabled(False)
+            self.stopButton.setEnabled(True)
 
-        # Disable the button if the color is red
-        button.setEnabled(color != QColor(Qt.red))
-        
-        # Force a repaint to immediately update the button color
-        button.repaint()
+            # Start process in a separate thread
+            self.thread = threading.Thread(target = lambda:self.process_thread(cradle, vessel, pockets, stirrer))
+            self.is_running = True
+            self.thread.start()
 
+    def stop_process(self):
+        if self.is_running:
+            # Stop the process
+            self.is_running = False
 
-    # 1. Button for RBR pick-up
-    def pickUpNewRBR(self, cradle):
-        self.toggle_button_color(self.rbrToVessel)
-        self.toggle_button_color(self.pickUp)
-        
+            # Wait for the thread to finish
+            self.thread.join()
 
-# 2. Button for moving RBR to vessel
-# 2.1 Move cradle to horizontal position of vessel
-# 2.2 Move cradle to vertical position of vessel
-    def moveRBRToVessel(self, cradle, vessel):
-        
-        
-        self.toggle_button_color(self.fillVessel)
-        self.toggle_button_color(self.liftRbr)
-        self.toggle_button_color(self.startMotor)
-        self.toggle_button_color(self.stopMotor)
-        self.toggle_button_color(self.rbrToVessel)
-# 3. Fill the vessel with reagnet
-# 3.1 Open valve for filling vessel
-# 3.2 Keep the valve opend for a certain amount of time
-# 3.3 Close valve for filling vessel
-# 3.4 CONDITIONS: Vessel is empty from liquid
-    def fillTheVessel(self, vessel):
-        
-        self.toggle_button_color(self.fillVessel)
-        self.toggle_button_color(self.emptyVessel)
-        self.toggle_button_color(self.liftRbr)
-# 4. Start stirrer motor
-# 4.1 Start stirrer motor with defined speed
-# 4.2 CONDITIONS: Motor must be in vessel
-    def startStirrerMotor(self, stirrer):
-        self.set_initial_button_color(self.startMotor, QColor(Qt.green))
-        self.set_initial_button_color(self.stopMotor, QColor(Qt.green))
-# 5. Stop stirrer motor
-# 5.1 Stop stirrer motor
-    def stopStirrerMotor(self, stirrer):
-        self.set_initial_button_color(self.startMotor, QColor(Qt.green))
-        self.set_initial_button_color(self.stopMotor, QColor(Qt.green))
-        print("Stopping motor!")
-        
-# 6. Empty vessel from reagent
-# 6.1 Open valve for emptying vessel
-# 6.2 Keep the valve opend for a certain amount of time
-# 6.3 Close valve for emptying vessel
-    def emptyTheVessel(self, vessel):
-        self.toggle_button_color(self.emptyVessel)
-        self.toggle_button_color(self.liftRbr)
-        
-# 7. Lift RBR from vessel
-# 7.1 Lift cradle to top vertical position
-    def liftRBRFromVessel(self, cradle):
-        
-        self.set_initial_button_color(self.pickUp, QColor(Qt.red))
-        self.set_initial_button_color(self.leaveRbr, QColor(Qt.green))
-        self.set_initial_button_color(self.rbrToVessel, QColor(Qt.red))
-        self.set_initial_button_color(self.fillVessel, QColor(Qt.red))
-        self.set_initial_button_color(self.startMotor, QColor(Qt.red))
-        self.set_initial_button_color(self.stopMotor, QColor(Qt.red))
-        self.set_initial_button_color(self.emptyVessel, QColor(Qt.red))
-        self.set_initial_button_color(self.liftRbr, QColor(Qt.red))
-# 8. Leave RBR into container
-# 8.1 Move RBR into horizontal position of desired container
-# 8.2 Move RBR into vertical position of desired container
-# 8.3 Move RBR back to top vertical position
-# 8.4 CONDITIONS: Container must be empty
-    def leaveRBRInPocket(self, cradle):
-        self.toggle_button_color(self.pickUp)
-        self.toggle_button_color(self.leaveRbr)
-      
+            # Update UI
+            self.startButton.setEnabled(True)
+            self.stopButton.setEnabled(False)
+
+    def process_thread(self, cradle, vessel, pockets, stirrer):
+        # Your process code goes here
+        while self.is_running:
+            # Run your process
+            for i in range(0, 2):
+                QApplication.processEvents()  # Allow GUI updates
+                print("Hello1")
+                sleep(5)
+                if not self.is_running:
+                    break
+                print("Hello2")
+                sleep(5)
+                if not self.is_running:
+                    break
+                print("Hello3")
+                sleep(5)
+                if not self.is_running:
+                    break
+                print("Hello4")
+                sleep(5)
+                if not self.is_running:
+                    break
+
 # ------------------------------------------ #
 # --------------- Main --------------------- #
 # ------------------------------------------ #
@@ -242,13 +132,4 @@ try:
 except:
     print("Exiting program")      
         
-# Close the serial connection when done
-#stirrer.serial.close()
-# Clean up GPIO
-#GPIO.cleanup()
-
-# More fixes
-# Fix so that switches <- horizontalMotor
-# Fix so that switches <- verticalSteppers
-# And add calibration method to these classes
-# First calibration on verticalSteppers then one the horizontalMotor 
+          

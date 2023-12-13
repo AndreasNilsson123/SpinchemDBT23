@@ -54,10 +54,6 @@ class Automation(QMainWindow):
         self.operationalTime.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime, self.operationalTime.value()))
         self.operationalTime_3.valueChanged.connect(lambda: self.on_slider_value_changed(self.dispOperationalTime_3, self.operationalTime_3.value()))
         
-        # Create list of slider values
-        self.slider_speed_values = [self.stirrerSpeed.value(), self.stirrerSpeed_3.value()]
-        self.operational_time_values = [self.operationalTime.value(), self.operationalTime_3.value()]
-        
         cradle = False; vessel = False; pockets = False; stirrer = False
         
         # Start process
@@ -94,24 +90,27 @@ class Automation(QMainWindow):
 
     def process_thread(self, cradle, vessel, pockets, stirrer):
         # Your process code goes here
+        # Create list of slider values
+        self.slider_speed_values = [self.stirrerSpeed.value(), self.stirrerSpeed_3.value()]
+        self.operational_time_values = [self.operationalTime.value(), self.operationalTime_3.value()]
         while self.is_running:
             # Run your process
-            for i in range(0, 2):
+            for i in [1,2]:
                 QApplication.processEvents()  # Allow GUI updates
-                print("Hello1")
-                sleep(5)
+                print("This is i: ", i)
+                sleep(1)
                 if not self.is_running:
                     break
                 print("Hello2")
-                sleep(5)
+                sleep(1)
                 if not self.is_running:
                     break
                 print("Hello3")
-                sleep(5)
+                sleep(1)
                 if not self.is_running:
                     break
                 print("Hello4")
-                sleep(5)
+                sleep(1)
                 if not self.is_running:
                     break
 

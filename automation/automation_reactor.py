@@ -184,8 +184,8 @@ class Automation(QMainWindow):
                 cycle_number = pocket.get_cycle_number()
                 
                 # Retrive arguments for cycle
-                stirrer_speed = self.slider_speed_values.get[cycle_number]
-                operational_time = self.operational_time_values.get[cycle_number]
+                stirrer_speed = self.slider_speed_values[cycle_number]
+                operational_time = self.operational_time_values[cycle_number]
                 
                 # Check stop button
                 if not self.is_running: break

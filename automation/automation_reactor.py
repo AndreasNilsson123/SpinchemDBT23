@@ -161,6 +161,7 @@ class Automation(QMainWindow):
             self.positionCalibration = False
     
     def move_to_pocket(self, cradle, pos_x, pos_z):
+        print("HELLLOOOO!!!")
         cradle.move_to_x_coord(pos_x, self.horizontal_delay)
         cradle.move_to_z_coord(pos_z, self.vertical_delay)
         cradle.move_to_z_coord(0, self.vertical_delay)

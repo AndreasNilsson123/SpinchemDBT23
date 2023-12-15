@@ -30,7 +30,7 @@ horizontal_motor = HorizontalMotor(S3PINSTEP, S3PINDIR)
 
 # Start stepper motor 1 
 vertical_steppers.move_up(nstep, delay_time)
-#horizontal_motor.move_left(nstep, 0.002, 0.002)
+#horizontal_motor.move_left(nstep, 0.002)
 
 # Start stepper motor 2
 #horizontal_motor.move_right(steps=nstep, delay=0.1*delay_time)

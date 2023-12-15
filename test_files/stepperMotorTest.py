@@ -18,7 +18,7 @@ S2PINDIR = 27
 S3PINSTEP = 22
 S3PINDIR = 23
 
-#0.00625 mm/step (160 step/mm), 125/20000 = 0.00625, 20000/125 = 160
+# 0.00625 mm/step (160 step/mm), 125/20000 = 0.00625, 20000/125 = 160
 # Steps and delay
 dist = 10
 nstep = 160*dist

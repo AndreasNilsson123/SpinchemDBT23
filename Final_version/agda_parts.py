@@ -65,8 +65,8 @@ class Cradle:
         Returns:
             None
         """
-        self.vertical_motor_1.set_direction("counterclockwise")
-        self.vertical_motor_2.set_direction("counterclockwise")
+        self.vertical_motor_1.set_direction("clockwise")
+        self.vertical_motor_2.set_direction("clockwise")
         self.vertical_motor_1.step(steps, delay, self.stepper_motor2_pin)
         self.update_position(0, -steps)
         
@@ -81,8 +81,8 @@ class Cradle:
         Returns:
             None
         """
-        self.vertical_motor_1.set_direction("clockwise")
-        self.vertical_motor_2.set_direction("clockwise")
+        self.vertical_motor_1.set_direction("counterclockwise")
+        self.vertical_motor_2.set_direction("counterclockwise")
         self.vertical_motor_1.step(steps, delay, self.stepper_motor2_pin)
         self.update_position(0, steps)
     

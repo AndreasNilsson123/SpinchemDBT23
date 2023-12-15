@@ -11,10 +11,10 @@ from horizontalMotor import HorizontalMotor
 GPIO.setmode(GPIO.BCM)
 
 # Set up pins
-S1PINSTEP = 17
-S1PINDIR = 27
-S2PINSTEP = 24
-S2PINDIR = 25
+S1PINSTEP = 23
+S1PINDIR = 22
+S2PINSTEP = 17
+S2PINDIR = 27
 S3PINSTEP = 22
 S3PINDIR = 23
 

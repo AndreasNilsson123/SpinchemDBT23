@@ -305,7 +305,7 @@ class Automation(QMainWindow):
             return self.operationalTime.value() if cycle_number == 0 else self.operationalTime_3.value()
         
         def move_to_pocket_retrieve(pocket):
-            pocket_retrieve_x, pocket_retrieve_z = pocket.get_position_retrieve()
+            pocket_retrieve_x, pocket_retrieve_z = pocket.get_position_retrive()
             self.move_to_pocket(cradle, pocket_retrieve_x, pocket_retrieve_z)
         
         def move_to_vessel_position():

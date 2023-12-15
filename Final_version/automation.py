@@ -136,7 +136,7 @@ class Automation(QMainWindow):
         loadUi(os.path.join(script_directory, "GUI_automation.ui"), self)
         # Define neccessary parameters
         self.positionCalibration = False
-        self.vertical_delay = 0.0013
+        self.vertical_delay = 0.001
         self.horizontal_delay = 0.002
         self.current_pocket = 0
         

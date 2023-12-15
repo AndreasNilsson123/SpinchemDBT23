@@ -22,7 +22,7 @@ class HorizontalMotor(StepperMotor):
         self.set_direction("clockwise")
         self.step(steps, delay)
 
-    def move_left(self, steps, delay):
+    def move_left(self, steps, initial_delay, final_delay):
         """
         Moves the object down by a specified number of steps with a given delay.
 
@@ -30,7 +30,7 @@ class HorizontalMotor(StepperMotor):
         :param delay: The delay between each step (float).
         """
         self.set_direction("counterclockwise")
-        self.step(steps, delay)
+        self.step(steps, initial_delay, final_delay)
     
     def distance_to_steps(self, distance):
         """

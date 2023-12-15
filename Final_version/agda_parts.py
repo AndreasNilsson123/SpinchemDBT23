@@ -185,8 +185,8 @@ class Cradle:
         Returns:
         - None
         """
-        self.vertical_motor_1.set_direction("counterclockwise")
-        self.vertical_motor_2.set_direction("counterclockwise")
+        self.vertical_motor_1.set_direction("clockwise")
+        self.vertical_motor_2.set_direction("clockwise")
         self.horizontal_motor.set_direction("clockwise")
         self.position.set_position(0, 0)
         # Run vertical motors to top position

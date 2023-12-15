@@ -362,7 +362,7 @@ class Automation(QMainWindow):
                 empty_vessel()
                 
                 dry_rbr()
-                
+                cradle.move_to_z_coord(0, self.vertical_delay)
                 move_to_pocket_leave(pocket)
                 cradle.move_to_z_coord(0, self.vertical_delay)
             self.is_running = False

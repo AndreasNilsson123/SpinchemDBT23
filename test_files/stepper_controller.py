@@ -34,36 +34,19 @@ class StepperMotor:
         elif direction == "counterclockwise":
             GPIO.output(self.direction_pin, GPIO.LOW)
 
-    def step(self, steps, initial_delay, final_delay):
+    def step(self, steps, delay):
         """
-        Executes a specified number of steps with a speed ramping delay between each step.
+        Executes a specified number of steps with a specified delay between each step.
 
         Parameters:
             steps (int): The number of steps to execute.
-            initial_delay (float): The initial delay in seconds between each step.
-            final_delay (float): The final delay in seconds between each step.
+            delay (float): The delay in seconds between each step.
 
         Returns:
             None
         """
-        # Determine the step size for the speed ramping
-        delay_step = (initial_delay - final_delay) / steps
-
-        # Determine the direction based on the number of steps
-        direction = GPIO.HIGH if steps > 0 else GPIO.LOW
-        GPIO.output(self.direction_pin, direction)
-
-        # Execute the specified number of steps with speed ramping
-        for _ in range(abs(steps)):
+        for _ in range(steps):
             GPIO.output(self.step_pin, GPIO.HIGH)
-            time.sleep(initial_delay)
+            time.sleep(delay)
             GPIO.output(self.step_pin, GPIO.LOW)
-            time.sleep(initial_delay)
-            
-            # Adjust the delay for the next step
-            initial_delay -= delay_step
-            # Ensure the delay doesn't go below the final_delay
-            initial_delay = max(initial_delay, final_delay)
-
-        # Reset the direction pin after completing the steps
-        GPIO.output(self.direction_pin, GPIO.LOW)
+            time.sleep(delay)

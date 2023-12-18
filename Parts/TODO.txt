@@ -1,0 +1,6 @@
+--------------- TODO-Monday 8.30-12.00 -------------------
+- Troubleshoot pocket (cycle 2)
+- Check force sensors
+- Fix connection to vertical switch button right side
+- Fix switch located for lid closure
+- Fix some code

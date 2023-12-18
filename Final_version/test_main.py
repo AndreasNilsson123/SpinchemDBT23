@@ -93,27 +93,10 @@ class Automation(QMainWindow):
         # Create list of slider values
         self.slider_speed_values = [self.stirrerSpeed.value(), self.stirrerSpeed_3.value()]
         self.operational_time_values = [self.operationalTime.value(), self.operationalTime_3.value()]
-        while self.is_running:
-            # Run your process
-            for i in [1]:
-                QApplication.processEvents()  # Allow GUI updates
-                print("This is i: ", i)
-                sleep(1)
-                if not self.is_running:
-                    break
-                print("Hello2")
-                sleep(1)
-                if not self.is_running:
-                    break
-                print("Hello3")
-                sleep(1)
-                if not self.is_running:
-                    break
-                print("Hello4")
-                sleep(1)
-                if not self.is_running:
-                    break
-
+        print("Hello start Button")
+        self.is_running = False
+        self.startButton.setEnabled(True)
+        return
 # ------------------------------------------ #
 # --------------- Main --------------------- #
 # ------------------------------------------ #

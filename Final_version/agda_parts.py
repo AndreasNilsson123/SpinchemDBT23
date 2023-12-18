@@ -1,5 +1,5 @@
 from hardware import *
-from time import sleep
+from time import sleep, time
 import serial
 ########################
 # ------ Cradle ------ #
@@ -245,10 +245,12 @@ class Vessel:
         Returns:
             None
         """
+        start_time = time()
+        filling_time = volume * self.volume_to_time_reagent
         if not self.liquid_detection.is_filled():
-            filling_time = volume * self.volume_to_time_reagent
             self.valve_reagent.open()
-            sleep(filling_time)
+            while(time() - start_time < filling_time) and not self.liquid_detection.is_filled():
+                sleep(0.1)    
             self.valve_reagent.close()
         
     

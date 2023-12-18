@@ -342,6 +342,7 @@ class Automation(QMainWindow):
                 if not self.positionCalibration:
                     cradle.position_calibration()
                     self.positionCalibration = True
+                    sleep(1)
                 
                 cycle_number = pocket.get_cycle_number()
                 stirrer_speed = self.slider_speed_values[cycle_number]

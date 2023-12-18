@@ -151,7 +151,7 @@ class Automation(QMainWindow):
         
         # Other variables
         self.vesselVolume = 650
-        self.acidVolume = 50
+        self.acidVolume = 5
         self.emptyTime = 15
         self.dryingTime = 10
         self.is_running = False

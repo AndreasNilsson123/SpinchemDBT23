@@ -143,8 +143,8 @@ class Automation(QMainWindow):
         
         # Position of objects
         vessel_x = 5*295
-        vessel_y = 125*100
-        pocket1_x = int(3*5)
+        vessel_y = 123*100
+        pocket1_x = int(5*5)
         pocket1_y = int(131*100)
         pocket2_x = int(111*5)
         pocket2_y = int(131*100)

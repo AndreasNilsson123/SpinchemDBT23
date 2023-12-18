@@ -150,7 +150,7 @@ class Automation(QMainWindow):
         pocket2_y = int(130*100)
         
         # Other variables
-        self.vesselVolume = 400
+        self.vesselVolume = 650
         self.acidVolume = 50
         self.emptyTime = 15
         self.dryingTime = 10

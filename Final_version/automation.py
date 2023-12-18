@@ -137,7 +137,7 @@ class Automation(QMainWindow):
         # Define neccessary parameters
         self.positionCalibration = False
         self.vertical_delay_up = 0.002
-        self.vertical_delay_down = 0.0065
+        self.vertical_delay_down = 0.00065
         self.horizontal_delay = 0.002
         self.current_pocket = 0
         

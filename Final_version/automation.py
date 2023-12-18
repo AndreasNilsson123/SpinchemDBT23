@@ -137,7 +137,7 @@ class Automation(QMainWindow):
         # Define neccessary parameters
         self.positionCalibration = False
         self.vertical_delay_up = 0.002
-        self.vertical_delay_down = 0.00065
+        self.vertical_delay_down = 0.001
         self.horizontal_delay = 0.002
         self.current_pocket = 0
         
@@ -151,7 +151,7 @@ class Automation(QMainWindow):
         
         # Other variables
         self.vesselVolume = 650
-        self.acidVolume = 5
+        self.acidVolume = 10
         self.emptyTime = 15
         self.dryingTime = 10
         self.is_running = False

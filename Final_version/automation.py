@@ -136,7 +136,8 @@ class Automation(QMainWindow):
         loadUi(os.path.join(script_directory, "GUI_automation.ui"), self)
         # Define neccessary parameters
         self.positionCalibration = False
-        self.vertical_delay = 0.0015
+        self.vertical_delay_up = 0.002
+        self.vertical_delay_down = 0.001
         self.horizontal_delay = 0.002
         self.current_pocket = 0
         
@@ -144,9 +145,9 @@ class Automation(QMainWindow):
         vessel_x = 5*295
         vessel_y = 125*100
         pocket1_x = int(3*5)
-        pocket1_y = int(133*100)
+        pocket1_y = int(131*100)
         pocket2_x = int(111*5)
-        pocket2_y = int(133*100)
+        pocket2_y = int(131*100)
         
         # Other variables
         self.vesselVolume = 400
@@ -266,8 +267,8 @@ class Automation(QMainWindow):
             None
         """
         cradle.move_to_x_coord(pos_x, self.horizontal_delay)
-        cradle.move_to_z_coord(pos_z, self.vertical_delay)
-        cradle.move_to_z_coord(0, self.vertical_delay)
+        cradle.move_to_z_coord(pos_z, self.vertical_delay_down)
+        cradle.move_to_z_coord(0, self.vertical_delay_up)
     
     def move_to_vessel(self, cradle, pos_x, pos_z):
         """
@@ -283,7 +284,7 @@ class Automation(QMainWindow):
         """
         cradle.move_to_x_coord(pos_x, self.horizontal_delay)
         # Revision: add sensor check
-        cradle.move_to_z_coord(pos_z, self.vertical_delay)
+        cradle.move_to_z_coord(pos_z, self.vertical_delay_down)
 
     def process_thread(self, cradle, vessel, pockets, stirrer):
         """
@@ -348,10 +349,7 @@ class Automation(QMainWindow):
                 
                 move_to_pocket_retrieve(pocket)
                 move_to_vessel_position()
-                fill_vessel_with_reagent()
-                
-                if not self.is_running:
-                    break
+                fill_vessel_with_reagent()     
                 
                 stirrer_command(stirrer, stirrer_speed, "Start")
                 sleep(self.rest_time)
@@ -362,9 +360,9 @@ class Automation(QMainWindow):
                 empty_vessel()
                 
                 dry_rbr()
-                cradle.move_to_z_coord(0, self.vertical_delay)
+                cradle.move_to_z_coord(0, self.vertical_delay_up)
                 move_to_pocket_leave(pocket)
-                cradle.move_to_z_coord(0, self.vertical_delay)
+                cradle.move_to_z_coord(0, self.vertical_delay_up)
             self.is_running = False
                 
 

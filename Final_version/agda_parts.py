@@ -85,6 +85,7 @@ class Cradle:
         self.vertical_motor_2.set_direction("counterclockwise")
         self.vertical_motor_1.step(steps, delay, self.stepper_motor2_pin)
         self.update_position(0, steps)
+        print("Test123")
     
     def move_left(self, steps, delay):
         """

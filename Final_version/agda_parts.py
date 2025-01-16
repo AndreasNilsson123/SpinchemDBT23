@@ -91,8 +91,8 @@ class Cradle:
         Move the object to the left by a specified number of steps with a given delay.
 
         Args:
-            steps (int): The number of steps to move the object.
-            delay (float): The delay in seconds between each step.
+            steps (int):    The number of steps to move the object.
+            delay (float):  The delay in seconds between each step.
 
         Returns:
             None

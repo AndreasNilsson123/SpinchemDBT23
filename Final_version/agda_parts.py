@@ -49,7 +49,8 @@ class Cradle:
         self.vertical_motor_1.set_direction("clockwise")
         self.vertical_motor_2.set_direction("clockwise")
         self.horizontal_motor.set_direction("clockwise")
-        
+        self.horizontal_motor.set_direction("clockwise")
+
         # NOTE: 160*z = number of steps to move z mm for vertical steppers
         # NOTE: 5*x = number of steps to move x mm for horizontal steppers
         # 500 / 100.3 = 4.99 approx = 5 steps per mm 

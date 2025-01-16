@@ -2,3 +2,5 @@
 Valve: https://www.elfa.se/en/solenoid-valve-smc-vdw22ja/p/11063406
 -----------------
 Relay: https://www.elfa.se/en/channel-relay-module-10a-250v-velleman-wpm400/p/30260982?trackQuery=cat-DNAV_PL_2090883&pos=14&origPos=14&origPageSize=50&track=true&sid=99e30edca710adbeab843100bfc2af1d651fe921 
+-----------------
+Relay: https://www.elfa.se/en/channel-relay-module-10a-250v-velleman-wpm400/p/30260982?trackQuery=cat-DNAV_PL_2090883&pos=14&origPos=14&origPageSize=50&track=true&sid=99e30edca710adbeab843100bfc2af1d651fe921

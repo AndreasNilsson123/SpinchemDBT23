@@ -100,6 +100,7 @@ class Cradle:
         self.horizontal_motor.set_direction("counterclockwise")
         self.horizontal_motor.step(steps, delay)
         self.update_position(steps, 0)
+        self.vertical_motor_2.set_direction("clockwise")
     
     def move_right(self, steps, delay):
         """

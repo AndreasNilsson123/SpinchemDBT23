@@ -113,7 +113,7 @@ class Cradle:
         Returns:
             None
         """
-        self.horizontal_motor.set_direction("clockwise")
+        self.horizontal_motor.set_direction("counterclockwise")
         self.horizontal_motor.step(steps, delay)
         self.update_position(-steps, 0)
     

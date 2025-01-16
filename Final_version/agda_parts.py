@@ -14,17 +14,17 @@ class Cradle:
         Initializes the instance of the class with the given parameters.
 
         Parameters:
-            step_v1 (int): The step pin for vertical motor 1.
-            direction_v1 (str): The direction pin for vertical motor 1.
-            step_v2 (int): The step pin for vertical motor 2.
-            direction_v2 (str): The direction pin for vertical motor 2.
-            step_h1 (int): The step pin for horizontal motor 1.
-            direction_h1 (str): The direction pin for horizontal motor 1.
-            sensor_v1 (int): The sensor pin for vertical motor 1.
-            sensor_v2 (int): The sensor pin for vertical motor 2.
-            sensor_h1 (int): The sensor pin for horizontal motor 1.
-            vessel_sensor_y (int): The sensor pin for vessel Y.
-            vessel_sensor_x (int): The sensor pin for vessel X.
+            step_v1 (int):          The step pin for vertical motor 1.
+            direction_v1 (str):     The direction pin for vertical motor 1.
+            step_v2 (int):          The step pin for vertical motor 2.
+            direction_v2 (str):     The direction pin for vertical motor 2.
+            step_h1 (int):          The step pin for horizontal motor 1.
+            direction_h1 (str):     The direction pin for horizontal motor 1.
+            sensor_v1 (int):        The sensor pin for vertical motor 1.
+            sensor_v2 (int):        The sensor pin for vertical motor 2.
+            sensor_h1 (int):        The sensor pin for horizontal motor 1.
+            vessel_sensor_y (int):  The sensor pin for vessel Y.
+            vessel_sensor_x (int):  The sensor pin for vessel X.
 
         Returns:
             None

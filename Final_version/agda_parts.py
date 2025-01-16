@@ -75,8 +75,8 @@ class Cradle:
         Move the object down by a certain number of steps at a specified delay.
 
         Parameters:
-            steps (int): The number of steps to move down.
-            delay (float): The delay between each step.
+            steps (int):    The number of steps to move down.
+            delay (float):  The delay between each step.
 
         Returns:
             None

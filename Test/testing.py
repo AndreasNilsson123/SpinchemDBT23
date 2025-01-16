@@ -3,7 +3,7 @@ import time
 import sys
 
 def operation(stop_event):
-    for i in range(5):
+    for i in range(6):
         if stop_event.is_set():
             break
         print(f"Performing step {i + 1}")

@@ -112,8 +112,8 @@ class Automation(QMainWindow):
         
         # Needs changing
         cradle = setup_cradle(V1_step=17, V1_dir=27, V2_step=24, V2_dir=25,
-                                    H_step=23, H_dir=22, sensor_v1=26, sensor_v2=21,
-                                    sensor_h1=13, vessel_sensor_x=19, vessel_sensor_y=11)
+                                H_step=23, H_dir=22, sensor_v1=26, sensor_v2=21,
+                                sensor_h1=13, vessel_sensor_x=19, vessel_sensor_y=11)
         vessel = setup_vessel(PIN_reagent=18, PIN_acid=16,
                               PIN_emptying=12, PIN_pump=7, PIN_liquid=10,
                               coord_x=vessel_x, coord_y=vessel_y)
